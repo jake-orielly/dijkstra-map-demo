@@ -8,6 +8,7 @@
             <table cellspacing="0">
                 <tr v-for="row in mapHeight" v-bind:key="row">
                     <td v-for="cell in mapWidth" v-bind:key="row + ',' + cell" class="clickable"
+                        :style="{ backgroundColor: getColor(cell - 1, row - 1)}"
                         @click="cellClick(cell - 1,row - 1)"
                     >
                         {{map[row - 1][cell - 1]}}

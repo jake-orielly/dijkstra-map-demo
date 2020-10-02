@@ -11,7 +11,8 @@ var app = new Vue({
         mapWidth:10,
         map:[],
         selections:["P","G","W"],
-        currSelection:0
+        currSelection:0,
+        maxVal:0
     },
     methods: {
         cellClick(x,y) {
@@ -26,6 +27,7 @@ var app = new Vue({
         },
         generate() {
             let toExpand = [];
+            this.maxVal = 0;
             this.resetMap();
             for (let y = 0; y < this.mapHeight; y++)
                 for (let x = 0; x < this.mapWidth; x++) 
@@ -39,19 +41,25 @@ var app = new Vue({
                             }
                         }
             this.expand(toExpand);
+            for (let y = 0; y < this.mapHeight; y++)
+                for (let x = 0; x < this.mapWidth; x++)
+                    if (!isNaN(this.map[y][x]))
+                        this.maxVal = Math.max(this.map[y][x],this.maxVal)
         },
         expand(toExpand) {
             let curr;
             while (toExpand.length) {
                 curr = toExpand.pop();
-                for (let dir of cardinalDirs) {
-                    let newX = curr[0] + dir[0];
-                    let newY = curr[1] + dir[1];
-                    if (this.onBoard(newX,newY)) {
-                        if (this.softSet(newX,newY,this.map[curr[1]][curr[0]] + 1))
-                            toExpand.push([newX,newY])
+                if (this.isEmpty(curr[0],curr[1]))
+                    for (let dir of cardinalDirs) {
+                        let newX = curr[0] + dir[0];
+                        let newY = curr[1] + dir[1];
+                        let newVal = this.map[curr[1]][curr[0]] + 1;
+                        if (this.onBoard(newX,newY)) {
+                            if (this.softSet(newX,newY,newVal)) 
+                                toExpand.push([newX,newY])
+                        }
                     }
-                }
             }
         },
         softSet(x,y,val) {
@@ -76,8 +84,17 @@ var app = new Vue({
                     if (!isNaN(this.map[y][x]))
                         this.setCell(x,y," ");
         },
+        isEmpty(x,y) {
+            return !isNaN(this.map[y][x]) || this.map[y][x] == " ";
+        },
         onBoard(x,y) {
             return x >= 0 && x < this.mapWidth && y >= 0 && y < this.mapHeight;
+        },
+        getColor(x,y) {
+            if (isNaN(this.map[y][x]))
+                return "rgba(0,0,0,0)";
+            else
+                return "rgba(255,0,0," + this.map[y][x] / this.maxVal + ")"
         }
     },
     created: function() {
