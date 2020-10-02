@@ -84,6 +84,15 @@ var app = new Vue({
                     if (!isNaN(this.map[y][x]))
                         this.setCell(x,y," ");
         },
+        clearMap() {
+            this.map = [];
+            for (let y = 0; y < this.mapHeight; y++) {
+                this.map.push([]);
+                for (let x = 0; x < this.mapWidth; x++) {
+                    this.map[y].push(" ");
+                }
+            }
+        },
         isEmpty(x,y) {
             return !isNaN(this.map[y][x]) || this.map[y][x] == " ";
         },
@@ -98,11 +107,6 @@ var app = new Vue({
         }
     },
     created: function() {
-        for (let y = 0; y < this.mapHeight; y++) {
-            this.map.push([]);
-            for (let x = 0; x < this.mapWidth; x++) {
-                this.map[y].push(" ");
-            }
-        }
+        this.clearMap();
     }
 });
