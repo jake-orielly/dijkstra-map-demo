@@ -19,12 +19,14 @@ var app = new Vue({
                 this.setCell(x,y," ")
             else
                 this.setCell(x,y,this.currSelection);
+            this.generate();
         },
         setSelection(selection) {
             this.currSelection = selection;
         },
         generate() {
             let toExpand = [];
+            this.resetMap();
             for (let y = 0; y < this.mapHeight; y++)
                 for (let x = 0; x < this.mapWidth; x++) 
                     if (this.map[y][x] == "G")    
@@ -67,6 +69,12 @@ var app = new Vue({
             let row = this.map[y]
             row[x] = val;
             Vue.set(app.map, y, row)
+        },
+        resetMap() {
+            for (let y = 0; y < this.mapHeight; y++)
+                for (let x = 0; x < this.mapWidth; x++)
+                    if (!isNaN(this.map[y][x]))
+                        this.setCell(x,y," ");
         },
         onBoard(x,y) {
             return x >= 0 && x < this.mapWidth && y >= 0 && y < this.mapHeight;
