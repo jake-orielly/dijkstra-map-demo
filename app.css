@@ -4,8 +4,10 @@
 }
 
 td {
+    border: 1px solid black;
     height: 2rem;
     width: 2rem;
+    text-align: center;
 }
 
 .selected {
