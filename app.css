@@ -10,6 +10,20 @@ td {
     text-align: center;
 }
 
+#selection-container {
+    display: inline-block;
+}
+
+.selection {
+    float: left;
+    width: 1.2rem;
+    height: 1.2rem;
+    margin: 0.5rem;
+    border: 2px solid black;
+    text-align: center;
+}
+
 .selected {
     font-weight: bold;
+    border: 3px solid gold;
 }

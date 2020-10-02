@@ -3,23 +3,23 @@ const cardinalDirs = [
     [0,1],
     [-1,0],
     [0,-1]
-]
+];
+
 var app = new Vue({ 
     el: '#app',
     data: {
-        mapHeight:7,
-        mapWidth:10,
+        mapHeight:10,
+        mapWidth:14,
         map:[],
-        selections:["P","G","W"],
-        currSelection:0,
-        maxVal:0
+        selections:["P","G","W"," "],
+        draggable: ["W"," "],
+        currSelection:undefined,
+        maxVal:0,
+        dragging: false,
     },
     methods: {
         cellClick(x,y) {
-            if (this.map[y][x] == this.currSelection)
-                this.setCell(x,y," ")
-            else
-                this.setCell(x,y,this.currSelection);
+            this.setCell(x,y,this.currSelection);
             this.generate();
         },
         setSelection(selection) {
@@ -76,7 +76,7 @@ var app = new Vue({
         setCell(x,y,val) {
             let row = this.map[y]
             row[x] = val;
-            Vue.set(app.map, y, row)
+            Vue.set(app.map, y, row);
         },
         resetMap() {
             for (let y = 0; y < this.mapHeight; y++)
@@ -93,6 +93,18 @@ var app = new Vue({
                 }
             }
         },
+        setDrag(x,y,val) {
+            if (this.draggable.indexOf(this.currSelection) != -1) {
+                this.dragging = val;
+                if (val)
+                    this.cellClick(x,y);
+            }
+        },
+        dragEvent(x,y) {
+            if (this.dragging) {
+                this.cellClick(x,y);
+            }
+        },
         isEmpty(x,y) {
             return !isNaN(this.map[y][x]) || this.map[y][x] == " ";
         },
@@ -104,7 +116,7 @@ var app = new Vue({
                 return "rgba(0,0,0,0)";
             else
                 return "rgba(255,0,0," + this.map[y][x] / this.maxVal + ")"
-        }
+        },
     },
     created: function() {
         this.clearMap();
