@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="app.css">
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <table cellspacing="0">
+                <tr v-for="row in mapHeight" v-bind:key="row">
+                    <td v-for="cell in mapWidth" v-bind:key="row + ',' + cell" class="clickable"
+                        @click="cellClick(cell - 1,row - 1)"
+                    >
+                        {{map[row - 1][cell - 1]}}
+                    </td>
+                </tr>
+            </table>
+            <div>
+                <p v-for="item in selections" class="clickable"
+                    @click="setSelection(item)" :class="[currSelection == item ? 'selected' : '']"
+                >
+                    {{item}}
+                </p>
+            </div>
+        </div>
+        <script src="app.js"></script>
+    </body>
+</html>

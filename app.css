@@ -1,0 +1,13 @@
+.clickable {
+    cursor:pointer;
+    user-select: none;
+}
+
+td {
+    height: 2rem;
+    width: 2rem;
+}
+
+.selected {
+    font-weight: bold;
+}
