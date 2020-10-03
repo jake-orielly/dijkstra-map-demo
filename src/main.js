@@ -1,3 +1,5 @@
+import Vue from 'vue';
+
 const cardinalDirs = [
     [1,0],
     [0,1],
@@ -5,17 +7,18 @@ const cardinalDirs = [
     [0,-1]
 ];
 
-var app = new Vue({ 
-    el: '#app',
-    data: {
-        mapHeight:10,
-        mapWidth:14,
-        map:[],
-        selections:["P","G","W"," "],
-        draggable: ["W"," "],
-        currSelection:undefined,
-        maxVal:0,
-        dragging: false,
+export default {
+    data: function() {
+        return {
+            mapHeight:10,
+            mapWidth:14,
+            map:[],
+            selections:["P","G","W"," "],
+            draggable: ["W"," "],
+            currSelection:undefined,
+            maxVal:0,
+            dragging: false
+        }
     },
     methods: {
         cellClick(x,y) {
@@ -74,9 +77,11 @@ var app = new Vue({
                 return false;
         },
         setCell(x,y,val) {
-            let row = this.map[y]
-            row[x] = val;
-            Vue.set(app.map, y, row);
+            if (this.map[y][x] != val) {
+                let row = this.map[y]
+                row[x] = val;
+                this.$set(this.map, y, row);
+            }
         },
         resetMap() {
             for (let y = 0; y < this.mapHeight; y++)
@@ -121,4 +126,4 @@ var app = new Vue({
     created: function() {
         this.clearMap();
     }
-});
+}
