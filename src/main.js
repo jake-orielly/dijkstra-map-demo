@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Toggle from "../Toggle.vue"
 
 const cardinalDirs = [
     [1,0],
@@ -8,6 +8,9 @@ const cardinalDirs = [
 ];
 
 export default {
+    components: {
+        Toggle
+    },
     data: function() {
         return {
             mapHeight:10,

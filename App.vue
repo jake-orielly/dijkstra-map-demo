@@ -24,6 +24,7 @@
         <button @click="generate">Generate</button>
         <button @click="clearMap">Clear</button>
     </div>
+    <Toggle ref="toggle"></Toggle>
   </div>
 </template>
 
