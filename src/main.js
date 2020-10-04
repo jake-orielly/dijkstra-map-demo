@@ -7,6 +7,17 @@ const cardinalDirs = [
     [0,-1]
 ];
 
+const diagonalDirs = [
+    [1,0],
+    [0,1],
+    [-1,0],
+    [0,-1],
+    [1,1],
+    [-1,1],
+    [-1,-1],
+    [1,-1]
+];
+
 export default {
     components: {
         Toggle
@@ -20,7 +31,8 @@ export default {
             draggable: ["W"," "],
             currSelection:undefined,
             maxVal:0,
-            dragging: false
+            dragging: false,
+            selectedDir: cardinalDirs
         }
     },
     methods: {
@@ -38,7 +50,7 @@ export default {
             for (let y = 0; y < this.mapHeight; y++)
                 for (let x = 0; x < this.mapWidth; x++) 
                     if (this.map[y][x] == "G")    
-                        for (let dir of cardinalDirs) {
+                        for (let dir of this.selectedDir) {
                             let newX = x + dir[0];
                             let newY = y + dir[1];
                             if (this.onBoard(newX,newY)) {
@@ -57,7 +69,7 @@ export default {
             while (toExpand.length) {
                 curr = toExpand.pop();
                 if (this.isEmpty(curr[0],curr[1]))
-                    for (let dir of cardinalDirs) {
+                    for (let dir of this.selectedDir) {
                         let newX = curr[0] + dir[0];
                         let newY = curr[1] + dir[1];
                         let newVal = this.map[curr[1]][curr[0]] + 1;
@@ -125,6 +137,13 @@ export default {
             else
                 return "rgba(255,0,0," + this.map[y][x] / this.maxVal + ")"
         },
+        changeDirSelection() {
+            if (this.selectedDir == cardinalDirs)
+                this.selectedDir = diagonalDirs;
+            else
+                this.selectedDir = cardinalDirs;
+            this.generate();
+        }
     },
     created: function() {
         this.clearMap();

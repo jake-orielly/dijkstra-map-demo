@@ -14,7 +14,7 @@ export default {
 	},
 	methods: {
 		ping() {
-			console.log(this.sliderVal)
+			this.$parent.changeDirSelection();
 		}
 	}
 };
