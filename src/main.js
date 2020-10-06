@@ -1,4 +1,4 @@
-import Toggle from "../Toggle.vue"
+import Toggle from "./components/Toggle.vue"
 
 const cardinalDirs = [
     [1,0],
