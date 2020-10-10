@@ -10,6 +10,7 @@
                 @mouseover="dragEvent(cell - 1, row - 1)"
             >
                 {{map[row - 1][cell - 1]}}
+                <div class="path-node" v-if="pathMap[row-1][cell-1]"></div>
             </td>
         </tr>
     </table>
@@ -62,7 +63,8 @@ export default {
             mapHeight:10,
             mapWidth:14,
             map:[],
-            selections:["P","G","W"," "],
+            pathMap:[],
+            selections:["A","G","W"," "],
             draggable: ["W"," "],
             currSelection:undefined,
             maxVal:0,
@@ -72,7 +74,7 @@ export default {
     },
     methods: {
         cellClick(x,y) {
-            this.setCell(x,y,this.currSelection);
+            this.setCell(x,y,this.currSelection,this.map);
             this.generate();
         },
         setSelection(selection) {
@@ -80,6 +82,7 @@ export default {
         },
         generate() {
             let toExpand = [];
+            let agents = [];
             this.maxVal = 0;
             this.resetMap();
             for (let y = 0; y < this.mapHeight; y++)
@@ -93,7 +96,10 @@ export default {
                                 toExpand.push([newX,newY])
                             }
                         }
+                    else if (this.map[y][x] == "A")
+                        agents.push([y,x])
             this.expand(toExpand);
+            this.generatePath(agents);
             for (let y = 0; y < this.mapHeight; y++)
                 for (let x = 0; x < this.mapWidth; x++)
                     if (!isNaN(this.map[y][x]))
@@ -115,36 +121,71 @@ export default {
                     }
             }
         },
+        generatePath(agents) {
+            let currX, currY;
+            for (let agent of agents)
+                this.expandPath(agent[1],agent[0])
+        },
+        expandPath(x,y) {
+            this.setCell(x,y,"1",this.pathMap);
+            let baseVal = this.map[y][x];
+            let minVal, chosenDir, newX, newY;
+
+            // parseInt b/c of weird behavior isNaN(" ") => false
+            if (!isNaN(parseInt(this.map[y][x])))
+                minVal = this.map[y][x];
+            console.log(minVal)
+            for (let dir of this.selectedDir) {
+                newX = x + dir[1];
+                newY = y + dir[0];
+                if (this.onBoard(newX,newY) &&
+                !isNaN(parseInt(this.map[newY][newX])) && 
+                (minVal == undefined || this.map[newY][newX] < minVal)) {
+                    minVal = this.map[newY][newX];
+                    chosenDir = [newX,newY];
+                }
+            }
+            if (chosenDir) {
+                this.setCell(chosenDir[0],chosenDir[1],"1",this.pathMap)
+                this.expandPath(chosenDir[0],chosenDir[1]);
+            }
+        },
         softSet(x,y,val) {
             if (
                 (!isNaN(this.map[y][x]) && val < this.map[y][x])
                 || this.map[y][x] == " "
             ){
-                this.setCell(x,y,val);
+                this.setCell(x,y,val,this.map);
                 return true;
             }
             else
                 return false;
         },
-        setCell(x,y,val) {
-            if (this.map[y][x] != val) {
-                let row = this.map[y]
+        setCell(x,y,val,arr) {
+            if (arr[y][x] != val) {
+                let row = arr[y]
                 row[x] = val;
-                this.$set(this.map, y, row);
+                this.$set(arr, y, row);
             }
         },
         resetMap() {
             for (let y = 0; y < this.mapHeight; y++)
-                for (let x = 0; x < this.mapWidth; x++)
+                for (let x = 0; x < this.mapWidth; x++) {
                     if (!isNaN(this.map[y][x]))
-                        this.setCell(x,y," ");
+                        this.setCell(x,y," ",this.map);
+                    if (!isNaN(this.pathMap[y][x]))
+                        this.setCell(x,y,"",this.pathMap);
+                }
         },
         clearMap() {
             this.map = [];
+            this.pathMap = []
             for (let y = 0; y < this.mapHeight; y++) {
                 this.map.push([]);
+                this.pathMap.push([]);
                 for (let x = 0; x < this.mapWidth; x++) {
-                    this.map[y].push(" ");
+                    this.map[y].push("");
+                    this.pathMap[y].push("");
                 }
             }
         },
@@ -215,5 +256,12 @@ td {
 .selected {
     font-weight: bold;
     border: 3px solid gold;
+}
+
+.path-node {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 1rem;
+    background-color: blue;
 }
 </style>
