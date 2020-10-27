@@ -22,7 +22,7 @@
         </p>
     </div>
     <div>
-        <button @click="generate">Generate</button>
+        <button @click="step">Step</button>
         <button @click="clearMap">Clear</button>
     </div>
     <Toggle ref="toggle"></Toggle>
@@ -69,20 +69,55 @@ export default {
             currSelection:undefined,
             maxVal:0,
             dragging: false,
-            selectedDir: cardinalDirs
+            selectedDir: cardinalDirs,
+            agents:[]
         }
     },
     methods: {
         cellClick(x,y) {
             this.setCell(x,y,this.currSelection,this.map);
+            if (this.currSelection == "A")
+                this.agents.push([y,x])
             this.generate();
         },
         setSelection(selection) {
             this.currSelection = selection;
         },
+        step() {
+            for (let ind = 0; ind < this.agents.length; ind++)
+                this.agentStep(ind);
+            this.generate();
+        },
+        agentStep(ind) {
+            let x = this.agents[ind][1];
+            let y = this.agents[ind][0];
+            let baseVal = this.map[y][x];
+            let chosenDir = this.getNextStep(x,y);
+            if (chosenDir) {
+                this.map[y][x] = "";
+                this.agents[ind] = [chosenDir[1],chosenDir[0]];
+                this.map[chosenDir[1]][chosenDir[0]] = "A";
+            }
+        },
+        getNextStep(x,y) {
+            let minVal, chosenDir, newX, newY;
+            // parseInt b/c of weird behavior isNaN(" ") => false
+            if (!isNaN(parseInt(this.map[y][x])))
+                minVal = this.map[y][x];
+            for (let dir of this.selectedDir) {
+                newX = x + dir[1];
+                newY = y + dir[0];
+                if (this.onBoard(newX,newY) &&
+                !isNaN(parseInt(this.map[newY][newX])) && 
+                (minVal == undefined || this.map[newY][newX] < minVal)) {
+                    minVal = this.map[newY][newX];
+                    chosenDir = [newX,newY];
+                }
+            }
+            return chosenDir;
+        },
         generate() {
             let toExpand = [];
-            let agents = [];
             this.maxVal = 0;
             this.resetMap();
             for (let y = 0; y < this.mapHeight; y++)
@@ -96,10 +131,8 @@ export default {
                                 toExpand.push([newX,newY])
                             }
                         }
-                    else if (this.map[y][x] == "A")
-                        agents.push([y,x])
             this.expand(toExpand);
-            this.generatePath(agents);
+            this.generatePath();
             for (let y = 0; y < this.mapHeight; y++)
                 for (let x = 0; x < this.mapWidth; x++)
                     if (!isNaN(this.map[y][x]))
@@ -121,30 +154,15 @@ export default {
                     }
             }
         },
-        generatePath(agents) {
+        generatePath() {
             let currX, currY;
-            for (let agent of agents)
+            for (let agent of this.agents)
                 this.expandPath(agent[1],agent[0])
         },
         expandPath(x,y) {
             this.setCell(x,y,"1",this.pathMap);
             let baseVal = this.map[y][x];
-            let minVal, chosenDir, newX, newY;
-
-            // parseInt b/c of weird behavior isNaN(" ") => false
-            if (!isNaN(parseInt(this.map[y][x])))
-                minVal = this.map[y][x];
-            console.log(minVal)
-            for (let dir of this.selectedDir) {
-                newX = x + dir[1];
-                newY = y + dir[0];
-                if (this.onBoard(newX,newY) &&
-                !isNaN(parseInt(this.map[newY][newX])) && 
-                (minVal == undefined || this.map[newY][newX] < minVal)) {
-                    minVal = this.map[newY][newX];
-                    chosenDir = [newX,newY];
-                }
-            }
+            let chosenDir = this.getNextStep(x,y);
             if (chosenDir) {
                 this.setCell(chosenDir[0],chosenDir[1],"1",this.pathMap)
                 this.expandPath(chosenDir[0],chosenDir[1]);
@@ -179,7 +197,8 @@ export default {
         },
         clearMap() {
             this.map = [];
-            this.pathMap = []
+            this.pathMap = [];
+            this.agents = [];
             for (let y = 0; y < this.mapHeight; y++) {
                 this.map.push([]);
                 this.pathMap.push([]);
