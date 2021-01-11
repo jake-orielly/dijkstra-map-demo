@@ -18,10 +18,16 @@
 <script>
 
 export default {
-    props: [
-        'currSelection',
-        'selectedDir'
-    ],
+    props: {
+        currSelection: {
+            type: Array,
+            required: true
+        },
+        selectedDir: {
+            type: String,
+            required: true
+        }
+    },
     data() {
         return {
             mapHeight:14,

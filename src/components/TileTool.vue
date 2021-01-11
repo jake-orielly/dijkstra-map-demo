@@ -10,10 +10,16 @@
 
 <script>
 export default {
-    props: [
-        'item',
-        'isSelected'
-    ],
+    props: {
+        item: {
+            type: String,
+            required: true
+        },
+        isSelected: {
+            type: Boolean,
+            required: true
+        }
+    },
 	methods: {
         clicked() {
             this.$emit("clicked", this.item)
