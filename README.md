@@ -1,4 +1,4 @@
-# dijkstra-map-demo
+# path-map
 
 ## Project setup
 ```
