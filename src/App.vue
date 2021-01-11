@@ -1,31 +1,39 @@
 <template>
   <div>
-    <table cellspacing="0">
-        <tr v-for="row in mapHeight" v-bind:key="row">
-            <td v-for="cell in mapWidth" v-bind:key="row + ',' + cell" class="clickable"
-                :style="{ backgroundColor: getColor(cell - 1, row - 1)}"
-                @click="cellClick(cell - 1,row - 1)"
-                @mousedown="setDrag(cell - 1, row - 1, true)"
-                @mouseup="setDrag(cell - 1, row - 1, false)"
-                @mouseover="dragEvent(cell - 1, row - 1)"
-            >
-                {{map[row - 1][cell - 1]}}
-                <div class="path-node" v-if="pathMap[row-1][cell-1]"></div>
-            </td>
-        </tr>
-    </table>
-    <div id="selection-container">
-        <p v-for="item in selections" v-bind:key="item" class="clickable selection"
-            @click="setSelection(item)" :class="[currSelection == item ? 'selected' : '']"
-        >
-            {{item}}
-        </p>
+    <div id="board-container">
+        <table cellspacing="0">
+            <tr v-for="row in mapHeight" v-bind:key="row">
+                <td v-for="cell in mapWidth" v-bind:key="row + ',' + cell" class="clickable"
+                    :style="{ backgroundColor: getColor(cell - 1, row - 1)}"
+                    @click="cellClick(cell - 1,row - 1)"
+                    @mousedown="setDrag(cell - 1, row - 1, true)"
+                    @mouseup="setDrag(cell - 1, row - 1, false)"
+                    @mouseover="dragEvent(cell - 1, row - 1)"
+                >
+                    {{map[row - 1][cell - 1]}}
+                    <div class="path-node" v-if="pathMap[row-1][cell-1]"></div>
+                </td>
+            </tr>
+        </table>
     </div>
-    <div>
-        <button @click="step">Step</button>
-        <button @click="clearMap">Clear</button>
+    <div id="ui-container">
+        <div id="selection-container">
+            <TileTool 
+                v-for="item in selections" 
+                v-bind:key="item"
+                :item="item"
+                :isSelected="currSelection == item"
+                @clicked="setSelection"
+                class="clickable"
+            />
+        </div>
+        <div>
+            <button @click="step">Step</button>
+            <button @click="clearMap">Clear</button>
+        </div>
+        <Toggle ref="toggle"></Toggle>
+        <SidebarMenu></SidebarMenu>
     </div>
-    <Toggle ref="toggle"></Toggle>
   </div>
 </template>
 
@@ -33,6 +41,8 @@
 </script>
 
 <script>
+import SidebarMenu from './components/SidebarMenu.vue'
+import TileTool from './components/TileTool.vue'
 import Toggle from './components/Toggle.vue'
 
 const cardinalDirs = [
@@ -56,6 +66,8 @@ const diagonalDirs = [
 export default {
   name: 'App',
   components: {
+        SidebarMenu,
+        TileTool,
         Toggle
     },
     data: function() {
@@ -270,21 +282,6 @@ td {
     display: inline-block;
 }
 
-.selection {
-    float: left;
-    width: 3.2rem;
-    height: 3.2rem;
-    margin: 0.5rem;
-    font-size: 2rem;
-    border: 2px solid black;
-    text-align: center;
-}
-
-.selected {
-    font-weight: bold;
-    border: 3px solid gold;
-}
-
 .path-node {
     width: 1rem;
     height: 1rem;
@@ -294,5 +291,9 @@ td {
 
 button {
     font-size: 2rem;
+}
+
+#board-container, #ui-container {
+    float: left;
 }
 </style>
