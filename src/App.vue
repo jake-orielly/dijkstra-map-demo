@@ -60,8 +60,8 @@ export default {
     },
     data: function() {
         return {
-            mapHeight:10,
-            mapWidth:14,
+            mapHeight:14,
+            mapWidth:18,
             map:[],
             pathMap:[],
             selections:["A","G","W"," "],
@@ -247,6 +247,12 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+* {
+    font-family: 'Montserrat', sans-serif;
+}
+
 .clickable {
     cursor:pointer;
     user-select: none;
@@ -254,8 +260,9 @@ export default {
 
 td {
     border: 1px solid black;
-    height: 2rem;
-    width: 2rem;
+    height: 3rem;
+    width: 3rem;
+    font-size: 2rem;
     text-align: center;
 }
 
@@ -265,9 +272,10 @@ td {
 
 .selection {
     float: left;
-    width: 1.2rem;
-    height: 1.2rem;
+    width: 3.2rem;
+    height: 3.2rem;
     margin: 0.5rem;
+    font-size: 2rem;
     border: 2px solid black;
     text-align: center;
 }
@@ -282,5 +290,9 @@ td {
     height: 1rem;
     border-radius: 1rem;
     background-color: blue;
+}
+
+button {
+    font-size: 2rem;
 }
 </style>
