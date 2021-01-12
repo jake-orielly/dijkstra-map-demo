@@ -61,7 +61,7 @@ export default {
             map:[],
             pathMap:[],
             agents:[],
-            draggable: ["W"," "],
+            draggable: ["W","E"],
             maxVal:0,
             dragging: false,
             terrainVals: {
@@ -76,7 +76,14 @@ export default {
     },
 	methods: {
         cellClick(x,y) {
-            if (this.currSelection.type == "entity") {
+            if (this.currSelection.value == "E") {
+                this.setCell(x,y,"",this.map,"value");
+                this.setCell(x,y,"plains",this.map,"terrain");
+                this.agents = this.agents.filter(
+                    agent => agent.getX() != x || agent.getY() != y
+                );
+            }
+            else if (this.currSelection.type == "entity") {
                 this.setCell(x,y,this.currSelection.value,this.map,"value");
                 if (this.currSelection.value == "A")
                     this.agents.push(new Agent(x, y, this))
