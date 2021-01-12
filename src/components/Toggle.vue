@@ -1,31 +1,51 @@
 <template>
-    <label class="switch">
-        <input type="checkbox" v-model="sliderVal" @change="ping"/>
-        <span class="slider round"></span>
-    </label>
+    <div>
+        <label class="switch">
+            <input type="checkbox" v-model="sliderVal" @change="toggled"/>
+            <span class="slider round"></span>
+        </label>
+        <span v-if="sliderVal">{{onLabel}}</span>
+        <span v-if="!sliderVal">{{offLabel}}</span>
+    </div>
 </template>
 
 <script>
 export default {
+    props: {
+        onLabel: {
+            type: String,
+            required: true
+        },
+        offLabel: {
+            type: String,
+            required: true
+        }
+    },
     data() {
         return {
             sliderVal:true
         };
 	},
 	methods: {
-		ping() {
-			this.$parent.changeDirSelection();
+		toggled() {
+			this.$emit("toggle");
 		}
 	}
 };
 </script>
 
 <style scoped>
+span {
+    font-size: 2rem;
+    vertical-align: bottom;
+}
+
 .switch {
     position: relative;
     display: inline-block;
     width: 60px;
     height: 34px;
+    margin-right: 1rem;
 }
 
 .switch input {

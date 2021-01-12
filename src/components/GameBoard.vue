@@ -28,6 +28,11 @@ export default {
             required: true
         }
     },
+    watch: {
+        selectedDir: function() {
+            this.generate();
+        }
+    },
     data() {
         return {
             mapHeight:14,

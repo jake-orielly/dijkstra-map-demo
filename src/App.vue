@@ -29,7 +29,11 @@
         <ExpandableMenuRow
             :label="'Settings'"
         >
-            <Toggle/>
+            <Toggle 
+                @toggle="changeDirSelection" 
+                :onLabel="'Cardinal'"
+                :offLabel="'Diagonal'"
+            />
         </ExpandableMenuRow>
     </div>
   </div>
@@ -69,7 +73,6 @@ export default {
                 this.selectedDir = utilities.diagonalDirs;
             else
                 this.selectedDir = utilities.cardinalDirs;
-            this.generate();
         }
     }
 }
@@ -89,6 +92,10 @@ export default {
 
 #board-container {
     margin-right: 2rem;
+}
+
+#ui-container {
+    width: 20%;
 }
 
 .clickable {
