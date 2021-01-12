@@ -47,11 +47,21 @@
         <ExpandableMenuRow
             :label="'Actions'"
         >
-            <Slider
-                :min="0"
-                :max="3"
-                :value="0"
-            />
+            <button 
+                @click="setSpeed('pause')"
+            >
+                <font-awesome-icon :icon="['fas', 'pause']" />
+            </button>
+            <button 
+                @click="setSpeed('play')"
+            >
+                <font-awesome-icon :icon="['fas', 'play']" />
+            </button>
+            <button 
+                @click="setSpeed('forward')"
+            >
+                <font-awesome-icon :icon="['fas', 'forward']" />
+            </button>
             <button @click="$refs.gameBoard.step()">Step</button>
             <button @click="$refs.gameBoard.clearMap()">Clear</button>
         </ExpandableMenuRow>
