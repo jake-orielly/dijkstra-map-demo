@@ -88,7 +88,7 @@ export default {
             if (this.currSelection.type == "entity") {
                 this.setCell(x,y,this.currSelection.value,this.map,"value");
                 if (this.currSelection.value == "A")
-                    this.agents.push(new Agent(x, y))
+                    this.agents.push(new Agent(x, y, this))
             }
             else if (this.currSelection.type == "terrain") {
                 if (this.currSelection.value == "road") 
@@ -160,36 +160,8 @@ export default {
         },
         step() {
             for (let ind = 0; ind < this.agents.length; ind++)
-                this.agentStep(ind);
+                this.agents[ind].step();
             this.generate();
-        },
-        agentStep(ind) {
-            let x = this.agents[ind].getX();
-            let y = this.agents[ind].getY();
-            let chosenDir = this.getNextStep(x,y);
-            if (chosenDir) {
-                this.map[y][x].value = "";
-                this.agents[ind].setY(chosenDir[1]);
-                this.agents[ind].setX(chosenDir[0]);
-                this.map[chosenDir[1]][chosenDir[0]].value = "A";
-            }
-        },
-        getNextStep(x,y) {
-            let minVal, chosenDir, newX, newY;
-            // parseInt b/c of weird behavior isNaN(" ") => false
-            if (!isNaN(parseInt(this.map[y][x].value)))
-                minVal = this.map[y][x].value;
-            for (let dir of this.selectedDir) {
-                newX = x + dir[1];
-                newY = y + dir[0];
-                if (this.onBoard(newX,newY) &&
-                !isNaN(parseInt(this.map[newY][newX].value)) && 
-                (minVal == undefined || this.map[newY][newX].value < minVal)) {
-                    minVal = this.map[newY][newX].value;
-                    chosenDir = [newX,newY];
-                }
-            }
-            return chosenDir;
         },
         generate() {
             let toExpand = [];
@@ -238,14 +210,14 @@ export default {
         },
         generatePath() {
             for (let agent of this.agents)
-                this.expandPath(agent.getX(),agent.getY())
+                this.expandPath(agent.getX(),agent.getY(), agent)
         },
-        expandPath(x,y) {
+        expandPath(x,y,agent) {
             this.setCell(x,y,"1",this.pathMap);
-            let chosenDir = this.getNextStep(x,y);
+            let chosenDir = agent.getNextStep(x,y);
             if (chosenDir) {
                 this.setCell(chosenDir[0],chosenDir[1],"1",this.pathMap)
-                this.expandPath(chosenDir[0],chosenDir[1]);
+                this.expandPath(chosenDir[0],chosenDir[1], agent);
             }
         },
         softSet(x,y,val) {
