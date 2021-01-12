@@ -200,7 +200,7 @@ export default {
                             let newX = x + dir[0];
                             let newY = y + dir[1];
                             if (this.onBoard(newX,newY)) {
-                                this.softSet(newX,newY,1);
+                                this.softSet(newX,newY,this.getTerrainVal(newX, newY));
                                 toExpand.push([newX,newY])
                             }
                         }
