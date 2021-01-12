@@ -5,6 +5,9 @@
             ref="gameBoard"
             :currSelection="currSelection"
             :selectedDir="selectedDir"
+            :showingPath="showingPath"
+            :showingValues="showingValues"
+            :showingColors="showingColors"
         />
     </div>
     <div id="ui-container">
@@ -34,6 +37,21 @@
                 :onLabel="'Cardinal'"
                 :offLabel="'Diagonal'"
             />
+            <Toggle 
+                @toggle="toggleShowingPath" 
+                :onLabel="'Showing Path'"
+                :offLabel="'Hiding Path'"
+            />
+            <Toggle 
+                @toggle="toggleShowingValues" 
+                :onLabel="'Showing Values'"
+                :offLabel="'Hiding Values'"
+            />
+            <Toggle 
+                @toggle="toggleShowingColors" 
+                :onLabel="'Showing Colors'"
+                :offLabel="'Hiding Color'"
+            />
         </ExpandableMenuRow>
     </div>
   </div>
@@ -55,13 +73,16 @@ export default {
         GameBoard,
         ExpandableMenuRow,
         TileTool,
-        Toggle
+        Toggle,
     },
     data: function() {
         return {
             selections:["A","G","W"," "],
             selectedDir: utilities.cardinalDirs,
             currSelection:undefined,
+            showingPath: true,
+            showingValues: true,
+            showingColors: true
         }
     },
     methods: {
@@ -73,6 +94,15 @@ export default {
                 this.selectedDir = utilities.diagonalDirs;
             else
                 this.selectedDir = utilities.cardinalDirs;
+        },
+        toggleShowingPath() {
+            this.showingPath = !this.showingPath;
+        },
+        toggleShowingValues() {
+            this.showingValues = !this.showingValues;
+        },
+        toggleShowingColors() {
+            this.showingColors = !this.showingColors;
         }
     }
 }

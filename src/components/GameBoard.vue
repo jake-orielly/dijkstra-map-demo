@@ -8,8 +8,15 @@
                 @mouseup="setDrag(cell - 1, row - 1, false)"
                 @mouseover="dragEvent(cell - 1, row - 1)"
             >
-                {{map[row - 1][cell - 1]}}
-                <div class="path-node" v-if="pathMap[row-1][cell-1]"></div>
+                <span
+                    v-if="showingValues || isNaN(map[row - 1][cell - 1])"
+                >
+                    {{map[row - 1][cell - 1]}}
+                </span>
+                <div 
+                    class="path-node" 
+                    v-if="showingPath && pathMap[row-1][cell-1]"
+                ></div>
             </td>
         </tr>
     </table>
@@ -25,6 +32,18 @@ export default {
         },
         selectedDir: {
             type: Array,
+            required: true
+        },
+        showingPath: {
+            type: Boolean,
+            required: true
+        },
+        showingValues: {
+            type: Boolean,
+            required: true
+        },
+        showingColors: {
+            type: Boolean,
             required: true
         }
     },
@@ -74,7 +93,7 @@ export default {
             return x >= 0 && x < this.mapWidth && y >= 0 && y < this.mapHeight;
         },
         getColor(x,y) {
-            if (isNaN(this.map[y][x]))
+            if (!this.showingColors || isNaN(this.map[y][x]))
                 return "rgba(0,0,0,0)";
             else
                 return "rgba(255,0,0," + this.map[y][x] / this.maxVal + ")"
