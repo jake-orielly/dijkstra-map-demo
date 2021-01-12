@@ -10,7 +10,7 @@
             >
                 <img 
                     v-if="showingTerrain"
-                    src="../assets/plains.png"
+                    :src="getImgUrl(map[row - 1][cell - 1].terrain)"
                     class="terrain-img"
                 >
                 <span
@@ -32,7 +32,7 @@
 export default {
     props: {
         currSelection: {
-            type: String,
+            type: Object,
             required: false
         },
         selectedDir: {
@@ -78,10 +78,15 @@ export default {
     },
 	methods: {
         cellClick(x,y) {
-            this.setCell(x,y,this.currSelection,this.map,"value");
-            if (this.currSelection == "A")
-                this.agents.push([y,x])
-            this.generate();
+            if (this.currSelection.type == "entity") {
+                this.setCell(x,y,this.currSelection.value,this.map,"value");
+                if (this.currSelection.value == "A")
+                    this.agents.push([y,x])
+                this.generate();
+            }
+            else if (this.currSelection.type == "terrain") {
+                this.setCell(x,y,this.currSelection.value,this.map,"terrain");
+            }
         },
         dragEvent(x,y) {
             if (this.dragging) {
@@ -89,7 +94,7 @@ export default {
             }
         },
         setDrag(x,y,val) {
-            if (this.draggable.indexOf(this.currSelection) != -1) {
+            if (this.draggable.indexOf(this.currSelection.value) != -1 || this.currSelection.type == "terrain") {
                 this.dragging = val;
                 if (val)
                     this.cellClick(x,y);
@@ -236,6 +241,9 @@ export default {
                 }
             }
         },
+        getImgUrl(item) {
+           return require(`../assets/${item}.png`)
+        }
     }
 };
 </script>

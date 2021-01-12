@@ -19,8 +19,8 @@
                 v-for="item in entityTools" 
                 v-bind:key="item"
                 :item="item"
-                :isSelected="currSelection == item"
-                @clicked="setSelection"
+                :isSelected="currSelection.value == item"
+                @clicked="setSelection(item,'entity')"
                 class="clickable"
             >
                 <span>{{item}}</span>
@@ -33,8 +33,8 @@
                 v-for="item in terrainTools" 
                 v-bind:key="item"
                 :item="item"
-                :isSelected="currSelection == item"
-                @clicked="setSelection"
+                :isSelected="currSelection.value == item"
+                @clicked="setSelection(item,'terrain')"
                 class="clickable"
             >
                 <img 
@@ -107,7 +107,10 @@ export default {
             entityTools:["A","G","W"," "],
             terrainTools:["road","plains","mountain"],
             selectedDir: utilities.cardinalDirs,
-            currSelection:undefined,
+            currSelection: {
+                value: undefined, 
+                type: undefined
+            },
             showingPath: true,
             showingValues: true,
             showingColors: true,
@@ -115,8 +118,11 @@ export default {
         }
     },
     methods: {
-        setSelection(selection) {
-            this.currSelection = selection;
+        setSelection(selection, type) {
+            this.currSelection = {
+                value: selection,
+                type: type
+            };
         },
         changeDirSelection() {
             if (this.selectedDir == utilities.cardinalDirs)
