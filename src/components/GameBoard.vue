@@ -225,18 +225,8 @@ export default {
 </script>
 
 <style scoped>
-.path-node {
-    width: 1rem;
-    height: 1rem;
-    border-radius: 1rem;
-    background-color: blue;
-}
-
-#board-container, #ui-container {
-    float: left;
-}
-
 td {
+    position: relative;
     border: 1px solid black;
     height: 3rem;
     width: 3rem;
@@ -244,4 +234,17 @@ td {
     text-align: center;
 }
 
+span {
+    z-index: 3;
+}
+
+.path-node {
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 1rem;
+    bottom: 0rem;
+    background-color: blue;
+    z-index: 2;
+}
 </style>
