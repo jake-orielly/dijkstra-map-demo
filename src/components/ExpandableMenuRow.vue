@@ -8,7 +8,10 @@
             <span v-if="expanded">&#9650;</span>
             <span v-if="!expanded">&#9660;</span>
         </p>
-        <div v-if="expanded">
+        <div 
+            v-if="expanded"
+            class="row-content"
+        >
             <slot></slot>
         </div>
     </div>
@@ -38,5 +41,9 @@ export default {
 <style scoped>
 p {
     font-size: 2rem;
+}
+
+.row-content {
+    display: inline-block;
 }
 </style>
