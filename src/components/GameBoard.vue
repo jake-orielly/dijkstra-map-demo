@@ -126,11 +126,11 @@ export default {
                 }
             }
             if (roadTotal == 0 || roadTotal == 3 || roadTotal == 7)
-                return "road-10";
+                return "roads/road-10";
             else if (roadTotal == 5 || roadTotal == 11)
-                return "road-16";
+                return "roads/road-16";
             else
-                return "road-" + roadTotal;
+                return "roads/road-" + roadTotal;
         },
         dragEvent(x,y) {
             if (this.dragging) {
