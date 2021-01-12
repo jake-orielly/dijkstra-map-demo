@@ -8,6 +8,7 @@
             :showingPath="showingPath"
             :showingValues="showingValues"
             :showingColors="showingColors"
+            :showingTerrain="showingTerrain"
         />
     </div>
     <div id="ui-container">
@@ -70,7 +71,12 @@
             <Toggle 
                 @toggle="toggleShowingColors" 
                 :onLabel="'Showing Colors'"
-                :offLabel="'Hiding Color'"
+                :offLabel="'Hiding Colors'"
+            />
+            <Toggle 
+                @toggle="toggleShowingTerrain" 
+                :onLabel="'Showing Terrain'"
+                :offLabel="'Hiding Terrain'"
             />
         </ExpandableMenuRow>
 
@@ -104,7 +110,8 @@ export default {
             currSelection:undefined,
             showingPath: true,
             showingValues: true,
-            showingColors: true
+            showingColors: true,
+            showingTerrain: true
         }
     },
     methods: {
@@ -125,6 +132,9 @@ export default {
         },
         toggleShowingColors() {
             this.showingColors = !this.showingColors;
+        },
+        toggleShowingTerrain() {
+            this.showingTerrain = !this.showingTerrain;
         },
         getImgUrl(item) {
            return require(`./assets/${item}.png`)

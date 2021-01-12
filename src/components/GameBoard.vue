@@ -8,10 +8,15 @@
                 @mouseup="setDrag(cell - 1, row - 1, false)"
                 @mouseover="dragEvent(cell - 1, row - 1)"
             >
-                <span
-                    v-if="showingValues || isNaN(map[row - 1][cell - 1])"
+                <img 
+                    v-if="showingTerrain"
+                    src="../assets/plains.png"
+                    class="terrain-img"
                 >
-                    {{map[row - 1][cell - 1]}}
+                <span
+                    v-if="showingValues || isNaN(map[row - 1][cell - 1].value)"
+                >
+                    {{map[row - 1][cell - 1].value}}
                 </span>
                 <div 
                     class="path-node" 
@@ -45,6 +50,10 @@ export default {
         showingColors: {
             type: Boolean,
             required: true
+        },
+        showingTerrain: {
+            type: Boolean,
+            required: true
         }
     },
     watch: {
@@ -69,7 +78,7 @@ export default {
     },
 	methods: {
         cellClick(x,y) {
-            this.setCell(x,y,this.currSelection,this.map);
+            this.setCell(x,y,this.currSelection,this.map,"value");
             if (this.currSelection == "A")
                 this.agents.push([y,x])
             this.generate();
@@ -87,16 +96,16 @@ export default {
             }
         },
         isEmpty(x,y) {
-            return !isNaN(this.map[y][x]) || this.map[y][x] == " ";
+            return !isNaN(this.map[y][x].value) || this.map[y][x].value == " ";
         },
         onBoard(x,y) {
             return x >= 0 && x < this.mapWidth && y >= 0 && y < this.mapHeight;
         },
         getColor(x,y) {
-            if (!this.showingColors || isNaN(this.map[y][x]))
+            if (!this.showingColors || isNaN(this.map[y][x].value))
                 return "rgba(0,0,0,0)";
             else
-                return "rgba(255,0,0," + this.map[y][x] / this.maxVal + ")"
+                return "rgba(255,0,0," + (this.map[y][x].value / this.maxVal) * 0.7 + ")"
         },
         step() {
             for (let ind = 0; ind < this.agents.length; ind++)
@@ -108,23 +117,23 @@ export default {
             let y = this.agents[ind][0];
             let chosenDir = this.getNextStep(x,y);
             if (chosenDir) {
-                this.map[y][x] = "";
+                this.map[y][x].value = "";
                 this.agents[ind] = [chosenDir[1],chosenDir[0]];
-                this.map[chosenDir[1]][chosenDir[0]] = "A";
+                this.map[chosenDir[1]][chosenDir[0]].value = "A";
             }
         },
         getNextStep(x,y) {
             let minVal, chosenDir, newX, newY;
             // parseInt b/c of weird behavior isNaN(" ") => false
-            if (!isNaN(parseInt(this.map[y][x])))
-                minVal = this.map[y][x];
+            if (!isNaN(parseInt(this.map[y][x].value)))
+                minVal = this.map[y][x].value;
             for (let dir of this.selectedDir) {
                 newX = x + dir[1];
                 newY = y + dir[0];
                 if (this.onBoard(newX,newY) &&
-                !isNaN(parseInt(this.map[newY][newX])) && 
-                (minVal == undefined || this.map[newY][newX] < minVal)) {
-                    minVal = this.map[newY][newX];
+                !isNaN(parseInt(this.map[newY][newX].value)) && 
+                (minVal == undefined || this.map[newY][newX].value < minVal)) {
+                    minVal = this.map[newY][newX].value;
                     chosenDir = [newX,newY];
                 }
             }
@@ -136,7 +145,7 @@ export default {
             this.resetMap();
             for (let y = 0; y < this.mapHeight; y++)
                 for (let x = 0; x < this.mapWidth; x++) 
-                    if (this.map[y][x] == "G")    
+                    if (this.map[y][x].value == "G")    
                         for (let dir of this.selectedDir) {
                             let newX = x + dir[0];
                             let newY = y + dir[1];
@@ -149,8 +158,8 @@ export default {
             this.generatePath();
             for (let y = 0; y < this.mapHeight; y++)
                 for (let x = 0; x < this.mapWidth; x++)
-                    if (!isNaN(this.map[y][x]))
-                        this.maxVal = Math.max(this.map[y][x],this.maxVal)
+                    if (!isNaN(this.map[y][x].value))
+                        this.maxVal = Math.max(this.map[y][x].value,this.maxVal)
         },
         expand(toExpand) {
             let curr;
@@ -160,7 +169,7 @@ export default {
                     for (let dir of this.selectedDir) {
                         let newX = curr[0] + dir[0];
                         let newY = curr[1] + dir[1];
-                        let newVal = this.map[curr[1]][curr[0]] + 1;
+                        let newVal = this.map[curr[1]][curr[0]].value + 1;
                         if (this.onBoard(newX,newY)) {
                             if (this.softSet(newX,newY,newVal)) 
                                 toExpand.push([newX,newY])
@@ -182,18 +191,22 @@ export default {
         },
         softSet(x,y,val) {
             if (
-                (!isNaN(this.map[y][x]) && val < this.map[y][x])
-                || this.map[y][x] == " "
+                (!isNaN(this.map[y][x].value) && val < this.map[y][x].value)
+                || this.map[y][x].value == " "
             ){
-                this.setCell(x,y,val,this.map);
+                this.setCell(x,y,val,this.map,"value");
                 return true;
             }
             else
                 return false;
         },
-        setCell(x,y,val,arr) {
-            if (arr[y][x] != val) {
-                let row = arr[y]
+        setCell(x,y,val,arr,prop) {
+            let row = arr[y]
+            if (prop && arr[y][x][prop] != val) {
+                row[x][prop] = val;
+                this.$set(arr, y, row);
+            }
+            else if (!prop && arr[y][x] != val) {
                 row[x] = val;
                 this.$set(arr, y, row);
             }
@@ -201,8 +214,8 @@ export default {
         resetMap() {
             for (let y = 0; y < this.mapHeight; y++)
                 for (let x = 0; x < this.mapWidth; x++) {
-                    if (!isNaN(this.map[y][x]))
-                        this.setCell(x,y," ",this.map);
+                    if (!isNaN(this.map[y][x].value))
+                        this.setCell(x,y," ",this.map,"value");
                     if (!isNaN(this.pathMap[y][x]))
                         this.setCell(x,y,"",this.pathMap);
                 }
@@ -215,7 +228,10 @@ export default {
                 this.map.push([]);
                 this.pathMap.push([]);
                 for (let x = 0; x < this.mapWidth; x++) {
-                    this.map[y].push("");
+                    this.map[y].push({
+                        value:"",
+                        terrain:"plains"
+                    });
                     this.pathMap[y].push("");
                 }
             }
@@ -225,17 +241,27 @@ export default {
 </script>
 
 <style scoped>
+img, td {
+    height: 3rem;
+    width: 3rem;
+}
+
 td {
     position: relative;
     border: 1px solid black;
-    height: 3rem;
-    width: 3rem;
     font-size: 2rem;
     text-align: center;
 }
 
 span {
     z-index: 3;
+}
+
+.terrain-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
 }
 
 .path-node {
