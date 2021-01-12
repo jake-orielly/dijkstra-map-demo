@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import Agent from "../js/Agent.js"
 
 export default {
     props: {
@@ -87,7 +88,7 @@ export default {
             if (this.currSelection.type == "entity") {
                 this.setCell(x,y,this.currSelection.value,this.map,"value");
                 if (this.currSelection.value == "A")
-                    this.agents.push([y,x])
+                    this.agents.push(new Agent(x, y))
             }
             else if (this.currSelection.type == "terrain") {
                 if (this.currSelection.value == "road") 
@@ -163,12 +164,13 @@ export default {
             this.generate();
         },
         agentStep(ind) {
-            let x = this.agents[ind][1];
-            let y = this.agents[ind][0];
+            let x = this.agents[ind].getX();
+            let y = this.agents[ind].getY();
             let chosenDir = this.getNextStep(x,y);
             if (chosenDir) {
                 this.map[y][x].value = "";
-                this.agents[ind] = [chosenDir[1],chosenDir[0]];
+                this.agents[ind].setY(chosenDir[1]);
+                this.agents[ind].setX(chosenDir[0]);
                 this.map[chosenDir[1]][chosenDir[0]].value = "A";
             }
         },
@@ -236,7 +238,7 @@ export default {
         },
         generatePath() {
             for (let agent of this.agents)
-                this.expandPath(agent[1],agent[0])
+                this.expandPath(agent.getX(),agent.getY())
         },
         expandPath(x,y) {
             this.setCell(x,y,"1",this.pathMap);
