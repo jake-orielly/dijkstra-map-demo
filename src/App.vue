@@ -49,6 +49,7 @@
         >
             <button 
                 @click="setSpeed('pause')"
+                class="button-selected"
             >
                 <font-awesome-icon :icon="['fas', 'pause']" />
             </button>
@@ -131,7 +132,8 @@ export default {
             showingPath: true,
             showingValues: true,
             showingColors: true,
-            showingTerrain: true
+            showingTerrain: true,
+            gameTick: undefined,
         }
     },
     methods: {
@@ -140,6 +142,13 @@ export default {
                 value: selection,
                 type: type
             };
+        },
+        setSpeed(speed) {
+            clearInterval(this.gameTick)
+            if (speed == "play")
+                this.gameTick = setInterval(this.$refs.gameBoard.step, 500);
+            else if (speed == "forward")
+                this.gameTick = setInterval(this.$refs.gameBoard.step, 150);
         },
         changeDirSelection() {
             if (this.selectedDir == utilities.cardinalDirs)
@@ -194,6 +203,8 @@ export default {
 
 button {
     font-size: 2rem;
+    border: 2px solid black;
+    border-radius: 5px;
 }
 
 .terrain-img {
