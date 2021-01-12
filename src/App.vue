@@ -47,6 +47,11 @@
         <ExpandableMenuRow
             :label="'Actions'"
         >
+            <Slider
+                :min="0"
+                :max="3"
+                :value="0"
+            />
             <button @click="$refs.gameBoard.step()">Step</button>
             <button @click="$refs.gameBoard.clearMap()">Clear</button>
         </ExpandableMenuRow>
@@ -90,6 +95,7 @@
 <script>
 import GameBoard from './components/GameBoard.vue'
 import ExpandableMenuRow from './components/ExpandableMenuRow.vue'
+import Slider from './components/Slider.vue'
 import TileTool from './components/TileTool.vue'
 import Toggle from './components/Toggle.vue'
 import utilities from "./js/utilities.js"
@@ -99,6 +105,7 @@ export default {
   components: {
         GameBoard,
         ExpandableMenuRow,
+        Slider,
         TileTool,
         Toggle,
     },
