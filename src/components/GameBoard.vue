@@ -14,7 +14,7 @@
                     class="terrain-img"
                 >
                 <span
-                    v-if="showingValues || isNaN(map[row - 1][cell - 1].value)"
+                    v-if="shouldShow(cell - 1, row - 1)"
                 >
                     {{map[row - 1][cell - 1].value}}
                 </span>
@@ -89,7 +89,7 @@ export default {
                     this.agents.push(new Agent(x, y, this))
             }
             else if (this.currSelection.type == "terrain") {
-                if (this.currSelection.value == "road") 
+                if (this.currSelection.value == "road" || this.currSelection.value == "wall") 
                     this.placeRoad(x,y);
                 else 
                     this.setCell(x,y,this.currSelection.value,this.map,"terrain");
@@ -98,18 +98,18 @@ export default {
         },
         placeRoad(x,y) {
             let newX, newY;
-            let value = this.computeRoadValue(x,y);
+            let value = this.computeTileNeighborValue(x,y,this.currSelection.value);
             this.setCell(x,y,value,this.map,"terrain");
             for (let dir of cardinalDirs) {
                 newX = x + dir[1];
                 newY = y + dir[0];
                 // When we place a new road, we need to update the old ones
-                if (this.onBoard(newX, newY) && this.map[newY][newX].terrain.substr(0,4) == "road") {
-                    this.setCell(newX,newY,this.computeRoadValue(newX,newY),this.map,"terrain");
+                if (this.onBoard(newX, newY) && this.map[newY][newX].terrain.substr(0,4) == this.currSelection.value) {
+                    this.setCell(newX,newY,this.computeTileNeighborValue(newX,newY,this.currSelection.value),this.map,"terrain");
                 }
             }
         },
-        computeRoadValue(x,y) {
+        computeTileNeighborValue(x,y,type) {
             let newX, newY;
             let primeMap = {
                 "-10":3,
@@ -121,16 +121,16 @@ export default {
             for (let dir of cardinalDirs) {
                 newX = x + dir[1];
                 newY = y + dir[0];
-                if (this.onBoard(newX, newY) && this.map[newY][newX].terrain.substr(0,4) == "road") {
+                if (this.onBoard(newX, newY) && this.map[newY][newX].terrain.substr(0,4) == type) {
                     roadTotal += primeMap["" + dir[0] + dir[1]];
                 }
             }
             if (roadTotal == 0 || roadTotal == 3 || roadTotal == 7)
-                return "roads/road-10";
+                return `${type}s/${type}-10`;
             else if (roadTotal == 5 || roadTotal == 11)
-                return "roads/road-16";
+                return `${type}s/${type}-16`;
             else
-                return "roads/road-" + roadTotal;
+                return `${type}s/${type}-${roadTotal}`;
         },
         dragEvent(x,y) {
             if (this.dragging) {
@@ -144,7 +144,14 @@ export default {
                     this.cellClick(x,y);
             }
         },
+        shouldShow(x,y) {
+            if (this.map[y][x].terrain.substr(0,4) == "wall")
+                return false;
+            return this.showingValues || isNaN(this.map[y][x].value)
+        },
         isEmpty(x,y) {
+            if (this.map[y][x].terrain.substr(0,4) == "wall")
+                return false;
             return !isNaN(this.map[y][x].value) || this.map[y][x].value == " ";
         },
         onBoard(x,y) {

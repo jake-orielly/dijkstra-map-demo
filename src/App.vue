@@ -115,8 +115,8 @@ export default {
     },
     data: function() {
         return {
-            entityTools:["A","G","W","E"],
-            terrainTools:["road","plains","mountain"],
+            entityTools:["A","G","E"],
+            terrainTools:["road","plains","mountain", "wall"],
             currSelection: {
                 value: undefined, 
                 type: undefined
