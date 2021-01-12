@@ -1,3 +1,5 @@
+import cardinalDirs from "../js/utilities.js"
+
 class Agent {
     constructor(x, y, vue) {
         this.x = x;
@@ -32,7 +34,7 @@ class Agent {
         // parseInt b/c of weird behavior isNaN(" ") => false
         if (!isNaN(parseInt(this.vue.map[y][x].value)))
             minVal = this.vue.map[y][x].value;
-        for (let dir of this.vue.selectedDir) {
+        for (let dir of cardinalDirs) {
             newX = x + dir[1];
             newY = y + dir[0];
             if (this.vue.onBoard(newX,newY) &&

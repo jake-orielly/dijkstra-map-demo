@@ -29,16 +29,13 @@
 
 <script>
 import Agent from "../js/Agent.js"
+import cardinalDirs from "../js/utilities.js"
 
 export default {
     props: {
         currSelection: {
             type: Object,
             required: false
-        },
-        selectedDir: {
-            type: Array,
-            required: true
         },
         showingPath: {
             type: Boolean,
@@ -55,11 +52,6 @@ export default {
         showingTerrain: {
             type: Boolean,
             required: true
-        }
-    },
-    watch: {
-        selectedDir: function() {
-            this.generate();
         }
     },
     data() {
@@ -84,7 +76,6 @@ export default {
     },
 	methods: {
         cellClick(x,y) {
-            console.log("top",x,y)
             if (this.currSelection.type == "entity") {
                 this.setCell(x,y,this.currSelection.value,this.map,"value");
                 if (this.currSelection.value == "A")
@@ -102,7 +93,7 @@ export default {
             let newX, newY;
             let value = this.computeRoadValue(x,y);
             this.setCell(x,y,value,this.map,"terrain");
-            for (let dir of this.selectedDir) {
+            for (let dir of cardinalDirs) {
                 newX = x + dir[1];
                 newY = y + dir[0];
                 // When we place a new road, we need to update the old ones
@@ -120,7 +111,7 @@ export default {
                 "0-1":11
             };
             let roadTotal = 0;
-            for (let dir of this.selectedDir) {
+            for (let dir of cardinalDirs) {
                 newX = x + dir[1];
                 newY = y + dir[0];
                 if (this.onBoard(newX, newY) && this.map[newY][newX].terrain.substr(0,4) == "road") {
@@ -170,7 +161,7 @@ export default {
             for (let y = 0; y < this.mapHeight; y++)
                 for (let x = 0; x < this.mapWidth; x++) 
                     if (this.map[y][x].value == "G")    
-                        for (let dir of this.selectedDir) {
+                        for (let dir of cardinalDirs) {
                             let newX = x + dir[0];
                             let newY = y + dir[1];
                             if (this.onBoard(newX,newY)) {
@@ -190,7 +181,7 @@ export default {
             while (toExpand.length) {
                 curr = toExpand.pop();
                 if (this.isEmpty(curr[0],curr[1]))
-                    for (let dir of this.selectedDir) {
+                    for (let dir of cardinalDirs) {
                         let newX = curr[0] + dir[0];
                         let newY = curr[1] + dir[1];
                         if (this.onBoard(newX,newY)) {

@@ -4,7 +4,6 @@
         <GameBoard
             ref="gameBoard"
             :currSelection="currSelection"
-            :selectedDir="selectedDir"
             :showingPath="showingPath"
             :showingValues="showingValues"
             :showingColors="showingColors"
@@ -70,11 +69,6 @@
             :label="'Settings'"
         >
             <Toggle 
-                @toggle="changeDirSelection" 
-                :onLabel="'Cardinal'"
-                :offLabel="'Diagonal'"
-            />
-            <Toggle 
                 @toggle="toggleShowingPath" 
                 :onLabel="'Showing Path'"
                 :offLabel="'Hiding Path'"
@@ -109,7 +103,6 @@ import ExpandableMenuRow from './components/ExpandableMenuRow.vue'
 import Slider from './components/Slider.vue'
 import TileTool from './components/TileTool.vue'
 import Toggle from './components/Toggle.vue'
-import utilities from "./js/utilities.js"
 
 export default {
   name: 'App',
@@ -124,7 +117,6 @@ export default {
         return {
             entityTools:["A","G","W"," "],
             terrainTools:["road","plains","mountain"],
-            selectedDir: utilities.cardinalDirs,
             currSelection: {
                 value: undefined, 
                 type: undefined
@@ -149,12 +141,6 @@ export default {
                 this.gameTick = setInterval(this.$refs.gameBoard.step, 500);
             else if (speed == "forward")
                 this.gameTick = setInterval(this.$refs.gameBoard.step, 150);
-        },
-        changeDirSelection() {
-            if (this.selectedDir == utilities.cardinalDirs)
-                this.selectedDir = utilities.diagonalDirs;
-            else
-                this.selectedDir = utilities.cardinalDirs;
         },
         toggleShowingPath() {
             this.showingPath = !this.showingPath;
