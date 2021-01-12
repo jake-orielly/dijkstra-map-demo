@@ -70,7 +70,12 @@ export default {
             agents:[],
             draggable: ["W"," "],
             maxVal:0,
-            dragging: false
+            dragging: false,
+            terrainVals: {
+                road:1,
+                plains:2,
+                mountain:3,
+            }
         }
     },
     created: function() {
@@ -82,11 +87,11 @@ export default {
                 this.setCell(x,y,this.currSelection.value,this.map,"value");
                 if (this.currSelection.value == "A")
                     this.agents.push([y,x])
-                this.generate();
             }
             else if (this.currSelection.type == "terrain") {
                 this.setCell(x,y,this.currSelection.value,this.map,"terrain");
             }
+            this.generate();
         },
         dragEvent(x,y) {
             if (this.dragging) {
@@ -174,8 +179,9 @@ export default {
                     for (let dir of this.selectedDir) {
                         let newX = curr[0] + dir[0];
                         let newY = curr[1] + dir[1];
-                        let newVal = this.map[curr[1]][curr[0]].value + 1;
                         if (this.onBoard(newX,newY)) {
+                            let newVal = this.map[curr[1]][curr[0]].value + 
+                            this.terrainVals[this.map[newY][newX].terrain];
                             if (this.softSet(newX,newY,newVal)) 
                                 toExpand.push([newX,newY])
                         }
