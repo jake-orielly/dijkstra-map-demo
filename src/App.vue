@@ -8,7 +8,9 @@
         />
     </div>
     <div id="ui-container">
-        <div id="selection-container">
+        <ExpandableMenuRow
+            :label="'Entities'"
+        >
             <TileTool 
                 v-for="item in selections" 
                 v-bind:key="item"
@@ -17,13 +19,18 @@
                 @clicked="setSelection"
                 class="clickable"
             />
-        </div>
-        <div>
+        </ExpandableMenuRow>
+        <ExpandableMenuRow
+            :label="'Actions'"
+        >
             <button @click="$refs.gameBoard.step()">Step</button>
             <button @click="$refs.gameBoard.clearMap()">Clear</button>
-        </div>
-        <Toggle/>
-        <SidebarMenu/>
+        </ExpandableMenuRow>
+        <ExpandableMenuRow
+            :label="'Settings'"
+        >
+            <Toggle/>
+        </ExpandableMenuRow>
     </div>
   </div>
 </template>
@@ -33,7 +40,7 @@
 
 <script>
 import GameBoard from './components/GameBoard.vue'
-import SidebarMenu from './components/SidebarMenu.vue'
+import ExpandableMenuRow from './components/ExpandableMenuRow.vue'
 import TileTool from './components/TileTool.vue'
 import Toggle from './components/Toggle.vue'
 import utilities from "./js/utilities.js"
@@ -42,7 +49,7 @@ export default {
   name: 'App',
   components: {
         GameBoard,
-        SidebarMenu,
+        ExpandableMenuRow,
         TileTool,
         Toggle
     },
@@ -75,13 +82,18 @@ export default {
     font-family: 'Montserrat', sans-serif;
 }
 
+#board-container, #ui-container {
+    width: auto;
+    float: left;
+}
+
+#board-container {
+    margin-right: 2rem;
+}
+
 .clickable {
     cursor:pointer;
     user-select: none;
-}
-
-#selection-container {
-    display: inline-block;
 }
 
 button {

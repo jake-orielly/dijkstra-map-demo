@@ -20,11 +20,11 @@
 export default {
     props: {
         currSelection: {
-            type: Array,
-            required: true
+            type: String,
+            required: false
         },
         selectedDir: {
-            type: String,
+            type: Array,
             required: true
         }
     },
