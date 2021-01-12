@@ -4,7 +4,7 @@
         @click="clicked"
         :class="{'selected' : isSelected}"
     >
-        {{item}}
+        <slot></slot>
     </div>
 </template>
 

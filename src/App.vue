@@ -15,13 +15,33 @@
             :label="'Entities'"
         >
             <TileTool 
-                v-for="item in selections" 
+                v-for="item in entityTools" 
                 v-bind:key="item"
                 :item="item"
                 :isSelected="currSelection == item"
                 @clicked="setSelection"
                 class="clickable"
-            />
+            >
+                <span>{{item}}</span>
+            </TileTool>
+        </ExpandableMenuRow>
+        <ExpandableMenuRow
+            :label="'Terrain'"
+        >
+            <TileTool 
+                v-for="item in terrainTools" 
+                v-bind:key="item"
+                :item="item"
+                :isSelected="currSelection == item"
+                @clicked="setSelection"
+                class="clickable"
+            >
+                <img 
+                    :src="getImgUrl(item)"
+                    v-bind:alt="item"
+                    class="terrain-img"
+                >
+            </TileTool>
         </ExpandableMenuRow>
         <ExpandableMenuRow
             :label="'Actions'"
@@ -53,6 +73,7 @@
                 :offLabel="'Hiding Color'"
             />
         </ExpandableMenuRow>
+
     </div>
   </div>
 </template>
@@ -77,7 +98,8 @@ export default {
     },
     data: function() {
         return {
-            selections:["A","G","W"," "],
+            entityTools:["A","G","W"," "],
+            terrainTools:["road","plains","mountain"],
             selectedDir: utilities.cardinalDirs,
             currSelection:undefined,
             showingPath: true,
@@ -103,7 +125,11 @@ export default {
         },
         toggleShowingColors() {
             this.showingColors = !this.showingColors;
+        },
+        getImgUrl(item) {
+           return require(`./assets/${item}.png`)
         }
+
     }
 }
 </script>
@@ -135,5 +161,10 @@ export default {
 
 button {
     font-size: 2rem;
+}
+
+.terrain-img {
+    height: 3rem;
+    width: 3rem;
 }
 </style>
