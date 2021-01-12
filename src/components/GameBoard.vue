@@ -83,15 +83,55 @@ export default {
     },
 	methods: {
         cellClick(x,y) {
+            console.log("top",x,y)
             if (this.currSelection.type == "entity") {
                 this.setCell(x,y,this.currSelection.value,this.map,"value");
                 if (this.currSelection.value == "A")
                     this.agents.push([y,x])
             }
             else if (this.currSelection.type == "terrain") {
-                this.setCell(x,y,this.currSelection.value,this.map,"terrain");
+                if (this.currSelection.value == "road") 
+                    this.placeRoad(x,y);
+                else 
+                    this.setCell(x,y,this.currSelection.value,this.map,"terrain");
             }
             this.generate();
+        },
+        placeRoad(x,y) {
+            let newX, newY;
+            let value = this.computeRoadValue(x,y);
+            this.setCell(x,y,value,this.map,"terrain");
+            for (let dir of this.selectedDir) {
+                newX = x + dir[1];
+                newY = y + dir[0];
+                // When we place a new road, we need to update the old ones
+                if (this.onBoard(newX, newY) && this.map[newY][newX].terrain.substr(0,4) == "road") {
+                    this.setCell(newX,newY,this.computeRoadValue(newX,newY),this.map,"terrain");
+                }
+            }
+        },
+        computeRoadValue(x,y) {
+            let newX, newY;
+            let primeMap = {
+                "-10":3,
+                "01":5,
+                "10":7,
+                "0-1":11
+            };
+            let roadTotal = 0;
+            for (let dir of this.selectedDir) {
+                newX = x + dir[1];
+                newY = y + dir[0];
+                if (this.onBoard(newX, newY) && this.map[newY][newX].terrain.substr(0,4) == "road") {
+                    roadTotal += primeMap["" + dir[0] + dir[1]];
+                }
+            }
+            if (roadTotal == 0 || roadTotal == 3 || roadTotal == 7)
+                return "road-10";
+            else if (roadTotal == 5 || roadTotal == 11)
+                return "road-16";
+            else
+                return "road-" + roadTotal;
         },
         dragEvent(x,y) {
             if (this.dragging) {
@@ -181,12 +221,18 @@ export default {
                         let newY = curr[1] + dir[1];
                         if (this.onBoard(newX,newY)) {
                             let newVal = this.map[curr[1]][curr[0]].value + 
-                            this.terrainVals[this.map[newY][newX].terrain];
+                            this.getTerrainVal(newX, newY);
                             if (this.softSet(newX,newY,newVal)) 
                                 toExpand.push([newX,newY])
                         }
                     }
             }
+        },
+        getTerrainVal(x,y) {
+            let terrain = this.map[y][x].terrain;
+            if (terrain.substr(0,4) == "road")
+                terrain = "road";
+            return this.terrainVals[terrain];
         },
         generatePath() {
             for (let agent of this.agents)
