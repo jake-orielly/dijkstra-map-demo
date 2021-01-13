@@ -300,6 +300,7 @@ export default {
 <style scoped>
 table {
     border: 3px solid black;
+    box-shadow: 4px 5px 11px #868181;
 }
 
 img, td {
