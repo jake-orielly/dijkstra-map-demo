@@ -19,7 +19,15 @@ export default {
         offLabel: {
             type: String,
             required: true
+        },
+        defaultValue: {
+            type: Boolean,
+            required: false,
+            default: true
         }
+    },
+    created() {
+        this.sliderVal = this.defaultValue;
     },
     data() {
         return {

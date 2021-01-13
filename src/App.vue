@@ -8,6 +8,7 @@
             :showingValues="showingValues"
             :showingColors="showingColors"
             :showingTerrain="showingTerrain"
+            :showingGridLines="showingGridLines"
         />
     </div>
     <div id="ui-container">
@@ -77,6 +78,7 @@
                 @toggle="toggleShowingValues" 
                 :onLabel="'Showing Values'"
                 :offLabel="'Hiding Values'"
+                :defaultValue="false"
             />
             <Toggle 
                 @toggle="toggleShowingColors" 
@@ -87,6 +89,12 @@
                 @toggle="toggleShowingTerrain" 
                 :onLabel="'Showing Terrain'"
                 :offLabel="'Hiding Terrain'"
+            />
+            <Toggle 
+                @toggle="toggleShowGridLines" 
+                :onLabel="'Showing Grid Lines'"
+                :offLabel="'Hiding Grid Lines'"
+                :defaultValue="false"
             />
         </ExpandableMenuRow>
 
@@ -122,9 +130,10 @@ export default {
                 type: undefined
             },
             showingPath: true,
-            showingValues: true,
+            showingValues: false,
             showingColors: true,
             showingTerrain: true,
+            showingGridLines: false,
             gameTick: undefined,
         }
     },
@@ -154,6 +163,9 @@ export default {
         toggleShowingTerrain() {
             this.showingTerrain = !this.showingTerrain;
         },
+        toggleShowGridLines() {
+            this.showingGridLines = !this.showingGridLines;
+        },
         getImgUrl(item) {
            return require(`./assets/${item}.png`)
         }
@@ -179,7 +191,7 @@ export default {
 }
 
 #ui-container {
-    width: 20%;
+    width: 25%;
 }
 
 .clickable {

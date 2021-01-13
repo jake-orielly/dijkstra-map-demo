@@ -2,7 +2,8 @@
     <table cellspacing="0">
         <tr v-for="row in mapHeight" v-bind:key="row">
             <td v-for="cell in mapWidth" v-bind:key="row + ',' + cell" class="clickable"
-                :style="{ backgroundColor: getColor(cell - 1, row - 1)}"
+                :style="{ backgroundColor: getColor(cell - 1, row - 1),
+                border: (showingGridLines ? '1px solid black' : '')}"
                 @click="cellClick(cell - 1,row - 1)"
                 @mousedown="setDrag(cell - 1, row - 1, true)"
                 @mouseup="setDrag(cell - 1, row - 1, false)"
@@ -50,6 +51,10 @@ export default {
             required: true
         },
         showingTerrain: {
+            type: Boolean,
+            required: true
+        },
+        showingGridLines: {
             type: Boolean,
             required: true
         }
