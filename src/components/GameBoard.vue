@@ -1,5 +1,8 @@
 <template>
-    <table cellspacing="0">
+    <table 
+        cellspacing="0"
+        @mouseleave="clearDrag"
+    >
         <tr v-for="row in mapHeight" v-bind:key="row">
             <td v-for="cell in mapWidth" v-bind:key="row + ',' + cell" class="clickable"
                 :style="{ backgroundColor: getColor(cell - 1, row - 1),
@@ -148,6 +151,10 @@ export default {
                 if (val)
                     this.cellClick(x,y);
             }
+        },
+        clearDrag() {
+            console.log(1)
+            this.dragging = false;
         },
         shouldShow(x,y) {
             if (this.map[y][x].terrain.substr(0,4) == "wall")
