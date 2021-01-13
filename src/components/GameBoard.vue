@@ -153,7 +153,6 @@ export default {
             }
         },
         clearDrag() {
-            console.log(1)
             this.dragging = false;
         },
         shouldShow(x,y) {

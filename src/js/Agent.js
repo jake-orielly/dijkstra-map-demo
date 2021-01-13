@@ -30,21 +30,31 @@ class Agent {
     }
 
     getNextStep(x,y) {
-        let minVal, chosenDir, newX, newY;
+        let minVal, chosenDir, newX, newY, newVal;
+        let currVal = this.vue.map[y][x].value;
+        if (currVal == "G")
+            currVal = 0;
         // parseInt b/c of weird behavior isNaN(" ") => false
         if (!isNaN(parseInt(this.vue.map[y][x].value)))
             minVal = this.vue.map[y][x].value;
         for (let dir of cardinalDirs) {
             newX = x + dir[1];
             newY = y + dir[0];
-            if (this.vue.onBoard(newX,newY) &&
-            !isNaN(parseInt(this.vue.map[newY][newX].value)) && 
-            (minVal == undefined || this.vue.map[newY][newX].value < minVal)) {
-                minVal = this.vue.map[newY][newX].value;
+            if (this.vue.onBoard(newX,newY)) {
+                if (!isNaN(parseInt(this.vue.map[newY][newX].value)))
+                    newVal = this.vue.map[newY][newX].value;
+                else if (this.vue.map[newY][newX].value == "G")
+                    newVal = 0
+                else 
+                    continue
+            }
+            if (minVal == undefined || newVal < minVal) {
+                minVal = newVal;
                 chosenDir = [newX,newY];
             }
         }
-        return chosenDir;
+        if (minVal < currVal || currVal == "A")
+            return chosenDir;
     }
 
     getX() {
