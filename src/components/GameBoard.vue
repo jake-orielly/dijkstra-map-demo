@@ -87,7 +87,7 @@ export default {
         cellClick(x,y) {
             if (this.currSelection.value == "E") {
                 this.setCell(x,y,"",this.map,"value");
-                this.setCell(x,y,"plains",this.map,"terrain");
+                this.setCell(x,y,this.getPlainsVal(),this.map,"terrain");
                 this.agents = this.agents.filter(
                     agent => agent.getX() != x || agent.getY() != y
                 );
@@ -100,6 +100,8 @@ export default {
             else if (this.currSelection.type == "terrain") {
                 if (this.currSelection.value == "road" || this.currSelection.value == "wall") 
                     this.placeRoad(x,y);
+                else if (this.currSelection.value == "plains")
+                    this.setCell(x,y,this.getPlainsVal,this.map,"terrain");
                 else 
                     this.setCell(x,y,this.currSelection.value,this.map,"terrain");
             }
@@ -227,6 +229,8 @@ export default {
             let terrain = this.map[y][x].terrain;
             if (terrain.substr(0,4) == "road")
                 terrain = "road";
+            else if (terrain.substr(0,5) == "plains")
+                terrain = "plains";
             return this.terrainVals[terrain];
         },
         generatePath() {
@@ -282,15 +286,16 @@ export default {
                 for (let x = 0; x < this.mapWidth; x++) {
                     this.map[y].push({
                         value:"",
-                        terrain:"plains"
+                        terrain:this.getPlainsVal()
                     });
                     this.pathMap[y].push("");
                 }
             }
         },
+        getPlainsVal() {
+            return `plains/plains-${parseInt(Math.random() * 4)}`;
+        },
         getImgUrl(item) {
-            if (item == "plains")
-                item = `plains/plains-${parseInt(Math.random() * 4)}`;
             return require(`../assets/${item}.png`)
         }
     }
