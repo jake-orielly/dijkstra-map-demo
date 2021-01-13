@@ -287,9 +287,10 @@ img, td {
 
 td {
     position: relative;
-    border: 1px solid black;
     font-size: 2rem;
     text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
 span {
