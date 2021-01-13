@@ -34,6 +34,7 @@
 <script>
 import Agent from "../js/Agent.js"
 import cardinalDirs from "../js/utilities.js"
+import goals from "../js/goals.js"
 
 export default {
     props: {
@@ -185,13 +186,16 @@ export default {
             this.resetMap();
             for (let y = 0; y < this.mapHeight; y++)
                 for (let x = 0; x < this.mapWidth; x++) 
-                    if (this.map[y][x].value == "G" || this.map[y][x].value == "g")    
+                    if (this.map[y][x].value in goals)
                         for (let dir of cardinalDirs) {
                             let newX = x + dir[0];
                             let newY = y + dir[1];
                             if (this.onBoard(newX,newY)) {
-                                this.softSet(newX,newY,this.getTerrainVal(newX, newY) - 
-                                (this.map[y][x].value == "G"  ? 3 : 0));
+                                this.softSet(
+                                    newX,
+                                    newY,
+                                    this.getTerrainVal(newX, newY) + goals[this.map[y][x].value]
+                                );
                                 toExpand.push([newX,newY])
                             }
                         }

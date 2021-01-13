@@ -1,4 +1,5 @@
 import cardinalDirs from "../js/utilities.js"
+import goals from "../js/goals.js"
 
 class Agent {
     constructor(x, y, vue) {
@@ -30,12 +31,10 @@ class Agent {
     }
 
     getNextStep(x,y) {
-        let minVal, chosenDir, newX, newY, newVal;
+        let minVal, chosenDir, newX, newY, newVal, newMapVal;
         let currVal = this.vue.map[y][x].value;
-        if (currVal == "G")
-            currVal = -3;
-        else if (currVal == "g")
-            currVal = 0;
+        if (currVal in goals)
+            currVal = goals[currVal];
         // parseInt b/c of weird behavior isNaN(" ") => false
         if (!isNaN(parseInt(this.vue.map[y][x].value)))
             minVal = this.vue.map[y][x].value;
@@ -43,12 +42,11 @@ class Agent {
             newX = x + dir[1];
             newY = y + dir[0];
             if (this.vue.onBoard(newX,newY)) {
-                if (!isNaN(parseInt(this.vue.map[newY][newX].value)))
-                    newVal = this.vue.map[newY][newX].value;
-                else if (this.vue.map[newY][newX].value == "G")
-                    newVal = -3;
-                else if (this.vue.map[newY][newX].value == "g")
-                    newVal = 0;
+                newMapVal = this.vue.map[newY][newX].value;
+                if (!isNaN(parseInt(newMapVal)))
+                    newVal = newMapVal;
+                else if (newMapVal in goals)
+                    newVal = goals[newMapVal];
                 else 
                     continue
             }
@@ -57,7 +55,7 @@ class Agent {
                 chosenDir = [newX,newY];
             }
         }
-        if (minVal < currVal || currVal == "A")
+        if (minVal < currVal || (x == this.getX() && y == this.getY()))
             return chosenDir;
     }
 

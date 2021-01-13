@@ -115,6 +115,8 @@ import Slider from './components/Slider.vue'
 import TileTool from './components/TileTool.vue'
 import Toggle from './components/Toggle.vue'
 
+import goals from './js/goals.js'
+
 export default {
   name: 'App',
   components: {
@@ -126,7 +128,7 @@ export default {
     },
     data: function() {
         return {
-            entityTools:["A","G","g","E"],
+            entityTools:["A",...Object.keys(goals),"E"],
             terrainTools:["road","plains","mountain", "wall"],
             currSelection: {
                 value: undefined, 
