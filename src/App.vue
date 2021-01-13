@@ -73,28 +73,31 @@
                 @toggle="toggleShowingPath" 
                 :onLabel="'Showing Path'"
                 :offLabel="'Hiding Path'"
+                :defaultValue="showingPath"
             />
             <Toggle 
                 @toggle="toggleShowingValues" 
                 :onLabel="'Showing Values'"
                 :offLabel="'Hiding Values'"
-                :defaultValue="false"
+                :defaultValue="showingValues"
             />
             <Toggle 
                 @toggle="toggleShowingColors" 
                 :onLabel="'Showing Colors'"
                 :offLabel="'Hiding Colors'"
+                :defaultValue="showingColors"
             />
             <Toggle 
                 @toggle="toggleShowingTerrain" 
                 :onLabel="'Showing Terrain'"
                 :offLabel="'Hiding Terrain'"
+                :defaultValue="showingTerrain"
             />
             <Toggle 
                 @toggle="toggleShowGridLines" 
                 :onLabel="'Showing Grid Lines'"
                 :offLabel="'Hiding Grid Lines'"
-                :defaultValue="false"
+                :defaultValue="showingGridLines"
             />
         </ExpandableMenuRow>
 
