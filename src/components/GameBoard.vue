@@ -289,7 +289,9 @@ export default {
             }
         },
         getImgUrl(item) {
-           return require(`../assets/${item}.png`)
+            if (item == "plains")
+                item = `plains/plains-${parseInt(Math.random() * 4)}`;
+            return require(`../assets/${item}.png`)
         }
     }
 };
