@@ -285,6 +285,10 @@ export default {
 </script>
 
 <style scoped>
+table {
+    border: 3px solid black;
+}
+
 img, td {
     height: 3rem;
     width: 3rem;
