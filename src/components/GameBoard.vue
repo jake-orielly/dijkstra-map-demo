@@ -185,12 +185,13 @@ export default {
             this.resetMap();
             for (let y = 0; y < this.mapHeight; y++)
                 for (let x = 0; x < this.mapWidth; x++) 
-                    if (this.map[y][x].value == "G")    
+                    if (this.map[y][x].value == "G" || this.map[y][x].value == "g")    
                         for (let dir of cardinalDirs) {
                             let newX = x + dir[0];
                             let newY = y + dir[1];
                             if (this.onBoard(newX,newY)) {
-                                this.softSet(newX,newY,this.getTerrainVal(newX, newY));
+                                this.softSet(newX,newY,this.getTerrainVal(newX, newY) - 
+                                (this.map[y][x].value == "G"  ? 3 : 0));
                                 toExpand.push([newX,newY])
                             }
                         }

@@ -33,6 +33,8 @@ class Agent {
         let minVal, chosenDir, newX, newY, newVal;
         let currVal = this.vue.map[y][x].value;
         if (currVal == "G")
+            currVal = -3;
+        else if (currVal == "g")
             currVal = 0;
         // parseInt b/c of weird behavior isNaN(" ") => false
         if (!isNaN(parseInt(this.vue.map[y][x].value)))
@@ -44,7 +46,9 @@ class Agent {
                 if (!isNaN(parseInt(this.vue.map[newY][newX].value)))
                     newVal = this.vue.map[newY][newX].value;
                 else if (this.vue.map[newY][newX].value == "G")
-                    newVal = 0
+                    newVal = -3;
+                else if (this.vue.map[newY][newX].value == "g")
+                    newVal = 0;
                 else 
                     continue
             }
