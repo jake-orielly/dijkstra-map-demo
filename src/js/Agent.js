@@ -30,7 +30,7 @@ class Agent {
         }
     }
 
-    getNextStep(x,y) {
+    getNextStep(x, y) {
         let minVal, chosenDir, newX, newY, newVal, newMapVal;
         let currVal = this.vue.map[y][x].value;
         if (currVal in goals)
@@ -41,18 +41,18 @@ class Agent {
         for (let dir of cardinalDirs) {
             newX = x + dir[1];
             newY = y + dir[0];
-            if (this.vue.onBoard(newX,newY)) {
+            if (this.vue.onBoard(newX, newY)) {
                 newMapVal = this.vue.map[newY][newX].value;
                 if (!isNaN(parseInt(newMapVal)))
                     newVal = newMapVal;
                 else if (newMapVal in goals)
                     newVal = goals[newMapVal];
-                else 
+                else
                     continue
             }
             if (minVal == undefined || newVal < minVal) {
                 minVal = newVal;
-                chosenDir = [newX,newY];
+                chosenDir = [newX, newY];
             }
         }
         if (minVal < currVal || (x == this.getX() && y == this.getY()))
@@ -71,7 +71,7 @@ class Agent {
         return this.y;
     }
 
-    setY(val) { 
+    setY(val) {
         this.y = val;
     }
 
