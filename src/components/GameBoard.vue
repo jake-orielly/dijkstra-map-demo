@@ -199,10 +199,13 @@ export default {
                 return false;
             return this.showingValues || isNaN(this.map[y][x].value)
         },
-        isEmpty(x,y) {
+        isValidMove(x,y) {
             if (this.map[y][x].terrain.substr(0,4) == "wall")
                 return false;
-            return !isNaN(this.map[y][x].value) || this.map[y][x].value == " ";
+            else if (this.map[y][x].entity == "agent")
+                return false;
+            else
+                return true;
         },
         onBoard(x,y) {
             return x >= 0 && x < this.mapWidth && y >= 0 && y < this.mapHeight;
@@ -225,12 +228,7 @@ export default {
             for (let y = 0; y < this.mapHeight; y++)
                 for (let x = 0; x < this.mapWidth; x++) 
                     if (this.map[y][x].entity in goals)
-                        for (let dir of utilities.cardinalDirs) {
-                            let newX = x + dir[0];
-                            let newY = y + dir[1];
-                            if (this.onBoard(newX,newY))
-                                toExpand.push([newX,newY])
-                        }
+                        toExpand.push([x,y,goals[this.map[y][x].entity].value])
             this.expand(toExpand);
             this.generatePath();
             for (let y = 0; y < this.mapHeight; y++)
@@ -245,20 +243,18 @@ export default {
             while (toExpand.length) {
                 iters++;
                 curr = toExpand.pop();
-                if (this.isEmpty(curr[0],curr[1]))
+                if (this.isValidMove(curr[0],curr[1]))
                     for (let dir of utilities.cardinalDirs) {
                         let newX = curr[0] + dir[0];
                         let newY = curr[1] + dir[1];
                         if (this.onBoard(newX,newY)) {
                             if (this.map[newY][newX].entity in goals)
                                 newVal = goals[this.map[newY][newX].entity].value;
-                            else if (this.map[curr[1]][curr[0]].value == " ")
-                                newVal = this.getTerrainVal(newX, newY);
                             else
-                                newVal = this.map[curr[1]][curr[0]].value + 
-                                this.getTerrainVal(newX, newY);
-                            if (this.softSet(newX,newY,newVal)) 
-                                toExpand.push([newX,newY])
+                                newVal = curr[2] + this.getTerrainVal(newX, newY);
+                            if (this.softSet(newX,newY,newVal)) {
+                                toExpand.push([newX,newY,newVal])
+                            }
                         }
                     }
             }
