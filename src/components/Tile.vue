@@ -3,7 +3,7 @@
         class="clickable"
         :style="{ backgroundColor: getColor(),
         border: (showingGridLines ? '1px solid black' : '')}"
-        @click="$emit(x,y)"
+        @click="$emit('click', x, y)"
         @mousedown="$emit('setDrag',x, y, true)"
         @mouseup="$emit('setDrag',x, y, false)"
         @mouseover="$emit('dragEvent',x, y)"

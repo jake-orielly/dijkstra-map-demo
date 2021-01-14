@@ -15,8 +15,7 @@
                 :showingTerrain="showingTerrain"
                 :showingPath="shouldShowPath(cell - 1, row - 1)"
                 @click="cellClick"
-                @mousedown="setDrag"
-                @mouseup="setDrag"
+                @setDrag="setDrag"
                 @dragEvent="dragEvent"
             />
         </tr>
@@ -80,8 +79,8 @@ export default {
     },
     data() {
         return {
-            mapHeight:25,
-            mapWidth:25,
+            mapHeight:10,
+            mapWidth:10,
             map:[],
             pathMap:[],
             agents:[],
