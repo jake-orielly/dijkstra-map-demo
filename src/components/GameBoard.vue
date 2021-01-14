@@ -132,7 +132,6 @@ export default {
                 else 
                     this.setCell(x,y,this.currSelection.value,this.map,"terrain");
             }
-            console.log(this.dragging)
             if (this.dragging) {
                 clearTimeout(this.generateTimeout);
                 this.generateTimeout = setTimeout(
@@ -218,7 +217,6 @@ export default {
             this.generate();
         },
         generate() {
-            console.log("Generate")
             let toExpand = [];
             this.maxVal = 0;
             this.resetMap();
@@ -245,7 +243,7 @@ export default {
                         this.maxVal = Math.max(this.map[y][x].value,this.maxVal)
         },
         expand(toExpand) {
-            let curr;
+            let curr, newVal;
             while (toExpand.length) {
                 curr = toExpand.pop();
                 if (this.isEmpty(curr[0],curr[1]))
@@ -253,8 +251,11 @@ export default {
                         let newX = curr[0] + dir[0];
                         let newY = curr[1] + dir[1];
                         if (this.onBoard(newX,newY)) {
-                            let newVal = this.map[curr[1]][curr[0]].value + 
-                            this.getTerrainVal(newX, newY);
+                            if (this.map[curr[1]][curr[0]].value == " ")
+                                newVal = this.getTerrainVal(newX, newY);
+                            else
+                                newVal = this.map[curr[1]][curr[0]].value + 
+                                this.getTerrainVal(newX, newY);
                             if (this.softSet(newX,newY,newVal)) 
                                 toExpand.push([newX,newY])
                         }
