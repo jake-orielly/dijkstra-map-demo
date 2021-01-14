@@ -4,44 +4,36 @@
         @mouseleave="clearDrag"
     >
         <tr v-for="row in mapHeight" v-bind:key="row">
-            <td v-for="cell in mapWidth" v-bind:key="row + ',' + cell" class="clickable"
-                :style="{ backgroundColor: getColor(cell - 1, row - 1),
-                border: (showingGridLines ? '1px solid black' : '')}"
-                @click="cellClick(cell - 1,row - 1)"
-                @mousedown="setDrag(cell - 1, row - 1, true)"
-                @mouseup="setDrag(cell - 1, row - 1, false)"
-                @mouseover="dragEvent(cell - 1, row - 1)"
-            >
-                <img 
-                    v-if="map[row - 1][cell - 1].entity"
-                    :src="getImgUrl(map[row - 1][cell - 1].entity)"
-                    class="entity-img"
-                >
-                <img 
-                    v-if="showingTerrain"
-                    :src="getImgUrl(map[row - 1][cell - 1].terrain)"
-                    class="terrain-img"
-                >
-                <span
-                    v-if="shouldShow(cell - 1, row - 1)"
-                >
-                    {{map[row - 1][cell - 1].value}}
-                </span>
-                <div 
-                    class="path-node" 
-                    v-if="showingPath && pathMap[row-1][cell-1]"
-                ></div>
-            </td>
+            <Tile
+                v-for="cell in mapWidth" 
+                v-bind:key="row + ',' + cell"
+                :tile="map[row - 1][cell - 1]"
+                :x="cell - 1"
+                :y="row - 1"
+                :showingValues="showingValues"
+                :showingGridLines="showingGridLines"
+                :showingTerrain="showingTerrain"
+                :showingPath="shouldShowPath(cell - 1, row - 1)"
+                @click="cellClick"
+                @mousedown="setDrag"
+                @mouseup="setDrag"
+                @dragEvent="dragEvent"
+            />
         </tr>
     </table>
 </template>
 
 <script>
+import Tile from "./Tile.vue"
+
 import Agent from "../js/Agent.js"
 import utilities from "../js/utilities.js"
 import goals from "../js/goals.js"
 
 export default {
+    components: {
+        Tile
+    },
     props: {
         currSelection: {
             type: Object,
@@ -88,8 +80,8 @@ export default {
     },
     data() {
         return {
-            mapHeight:14,
-            mapWidth:18,
+            mapHeight:25,
+            mapWidth:25,
             map:[],
             pathMap:[],
             agents:[],
@@ -172,9 +164,8 @@ export default {
                 return `${type}s/${type}-${roadTotal}`;
         },
         dragEvent(x,y) {
-            if (this.dragging) {
+            if (this.dragging)
                 this.cellClick(x,y);
-            }
         },
         setDrag(x,y,val) {
             if (this.draggable.indexOf(this.currSelection.value) != -1 || this.currSelection.type == "terrain") {
@@ -186,11 +177,6 @@ export default {
         clearDrag() {
             this.dragging = false;
         },
-        shouldShow(x,y) {
-            if (this.map[y][x].terrain.substr(0,4) == "wall" || this.map[y][x].entity)
-                return false;
-            return this.showingValues || isNaN(this.map[y][x].value)
-        },
         isValidMove(x,y) {
             if (this.map[y][x].terrain.substr(0,4) == "wall")
                 return false;
@@ -201,12 +187,6 @@ export default {
         },
         onBoard(x,y) {
             return x >= 0 && x < this.mapWidth && y >= 0 && y < this.mapHeight;
-        },
-        getColor(x,y) {
-            if (!this.showingColors || isNaN(this.map[y][x].value))
-                return "rgba(0,0,0,0)";
-            else
-                return `rgba(${this.rgbMapColor.join(",")},${(this.map[y][x].value / this.maxVal) * 0.7})`;
         },
         step() {
             for (let ind = 0; ind < this.agents.length; ind++)
@@ -299,6 +279,12 @@ export default {
                         this.setCell(x,y,"",this.pathMap);
                 }
         },
+        shouldShowPath(x, y) {
+            // TODO: Fix this
+            // return this.showingPath && this.pathMap[x][y];
+            x;y;
+            return false;
+        },
         clearMap() {
             this.map = [];
             this.pathMap = [];
@@ -319,9 +305,6 @@ export default {
         getPlainsVal() {
             return `plains/plains-${parseInt(Math.random() * 4)}`;
         },
-        getImgUrl(item) {
-            return utilities.getImgUrl(item);
-        }
     }
 };
 </script>
@@ -330,46 +313,5 @@ export default {
 table {
     border: 3px solid black;
     box-shadow: 4px 5px 11px #868181;
-}
-
-img, td {
-    height: 3rem;
-    width: 3rem;
-}
-
-td {
-    position: relative;
-    font-size: 2rem;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-}
-
-span {
-    z-index: 3;
-}
-
-.terrain-img, .entity-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-.terrain-img {
-    z-index: -1;
-}
-
-.entity-img {
-    z-index: 2;
-}
-
-.path-node {
-    position: absolute;
-    width: 1rem;
-    height: 1rem;
-    border-radius: 1rem;
-    bottom: 0rem;
-    background-color: blue;
-    z-index: 2;
 }
 </style>
