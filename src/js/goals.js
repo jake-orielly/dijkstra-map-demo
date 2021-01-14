@@ -3,7 +3,7 @@ const goals = {
         value: -3
     },
     "gold-small": {
-        value: 0
+        value: -1
     }
 }
 export default goals;

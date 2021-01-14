@@ -123,6 +123,8 @@ export default {
                 this.setCell(x,y,this.currSelection.value,this.map,"entity");
                 if (this.currSelection.value == "agent")
                     this.agents.push(new Agent(x, y, this))
+                else if (this.currSelection.value in goals)
+                    this.setCell(x,y,goals[this.currSelection.value].value,this.map,"value");
             }
             else if (this.currSelection.type == "terrain") {
                 if (this.currSelection.value == "road" || this.currSelection.value == "wall") 
@@ -193,7 +195,7 @@ export default {
             this.dragging = false;
         },
         shouldShow(x,y) {
-            if (this.map[y][x].terrain.substr(0,4) == "wall")
+            if (this.map[y][x].terrain.substr(0,4) == "wall" || this.map[y][x].entity)
                 return false;
             return this.showingValues || isNaN(this.map[y][x].value)
         },
@@ -226,14 +228,8 @@ export default {
                         for (let dir of utilities.cardinalDirs) {
                             let newX = x + dir[0];
                             let newY = y + dir[1];
-                            if (this.onBoard(newX,newY)) {
-                                this.softSet(
-                                    newX,
-                                    newY,
-                                    this.getTerrainVal(newX, newY) + goals[this.map[y][x].entity].value
-                                );
+                            if (this.onBoard(newX,newY))
                                 toExpand.push([newX,newY])
-                            }
                         }
             this.expand(toExpand);
             this.generatePath();
@@ -254,7 +250,9 @@ export default {
                         let newX = curr[0] + dir[0];
                         let newY = curr[1] + dir[1];
                         if (this.onBoard(newX,newY)) {
-                            if (this.map[curr[1]][curr[0]].value == " ")
+                            if (this.map[newY][newX].entity in goals)
+                                newVal = goals[this.map[newY][newX].entity].value;
+                            else if (this.map[curr[1]][curr[0]].value == " ")
                                 newVal = this.getTerrainVal(newX, newY);
                             else
                                 newVal = this.map[curr[1]][curr[0]].value + 

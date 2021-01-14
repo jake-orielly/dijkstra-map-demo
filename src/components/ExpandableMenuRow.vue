@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import { EventBus } from '../event-bus.js';
+
 export default {
     props: {
         label: {
@@ -30,9 +32,18 @@ export default {
             expanded: false
         }
     },
+    mounted() {
+        EventBus.$on('rowExpanded', this.contractOther);
+    },
 	methods: {
         toggleExpand() {
             this.expanded = !this.expanded;
+            if (this.expanded)
+                EventBus.$emit('rowExpanded', this.label);
+        },
+        contractOther(label) {
+            if (this.label != label)
+                this.expanded = false;
         }
     }
 };
