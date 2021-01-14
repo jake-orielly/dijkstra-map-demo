@@ -102,7 +102,6 @@ export default {
                 mountain:3,
             },
             rgbMapColor: [255,0,0],
-            generateTimeout: undefined,
             colorUpdateTimeout: undefined
         }
     },
@@ -134,14 +133,7 @@ export default {
                 else 
                     this.setCell(x,y,this.currSelection.value,this.map,"terrain");
             }
-            if (this.dragging) {
-                clearTimeout(this.generateTimeout);
-                this.generateTimeout = setTimeout(
-                    this.generate, 100
-                );
-            }
-            else
-                this.generate();
+            this.generate();
         },
         placeRoad(x,y) {
             let newX, newY;
@@ -238,10 +230,7 @@ export default {
         },
         expand(toExpand) {
             let curr, newVal;
-            let iters = 0;
-            console.time("expand");
             while (toExpand.length) {
-                iters++;
                 curr = toExpand.pop();
                 if (this.isValidMove(curr[0],curr[1]))
                     for (let dir of utilities.cardinalDirs) {
@@ -253,13 +242,11 @@ export default {
                             else
                                 newVal = curr[2] + this.getTerrainVal(newX, newY);
                             if (this.softSet(newX,newY,newVal)) {
-                                toExpand.push([newX,newY,newVal])
+                                toExpand.unshift([newX,newY,newVal])
                             }
                         }
                     }
             }
-            console.log(iters);
-            console.timeEnd("expand");
         },
         softSet(x,y,val) {
             if (
