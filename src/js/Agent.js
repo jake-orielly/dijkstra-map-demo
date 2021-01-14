@@ -19,7 +19,7 @@ class Agent {
 
         chosenDir = this.getNextStep(this.x, this.y);
         if (chosenDir) {
-            this.vue.map[this.y][this.x].value = "";
+            this.vue.map[this.y][this.x].entity = undefined;
             this.setY(chosenDir[1]);
             this.setX(chosenDir[0]);
             destTile = this.vue.map[chosenDir[1]][chosenDir[0]]
@@ -32,9 +32,9 @@ class Agent {
 
     getNextStep(x, y) {
         let minVal, chosenDir, newX, newY, newVal, newTile;
-        let currVal = this.vue.map[y][x].entity;
-        if (currVal in goals)
-            currVal = goals[currVal].value;
+        let currVal = this.vue.map[y][x].value;
+        if (this.vue.map[y][x].entity in goals)
+            currVal = goals[this.vue.map[y][x].entity].value;
         // parseInt b/c of weird behavior isNaN(" ") => false
         if (!isNaN(parseInt(this.vue.map[y][x].value)))
             minVal = this.vue.map[y][x].value;
@@ -42,11 +42,11 @@ class Agent {
             newX = x + dir[1];
             newY = y + dir[0];
             if (this.vue.onBoard(newX, newY)) {
-                newTile = this.vue.map[newY][newX].value;
-                if (!isNaN(parseInt(newTile.value)))
-                    newVal = newTile.value;
-                else if (newTile.entity in goals)
+                newTile = this.vue.map[newY][newX];
+                if (newTile.entity in goals)
                     newVal = goals[newTile.entity].value;
+                else if (!isNaN(parseInt(newTile.value)))
+                    newVal = newTile.value;
                 else
                     continue
             }
