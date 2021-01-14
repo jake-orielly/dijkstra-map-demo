@@ -79,8 +79,8 @@ export default {
     },
     data() {
         return {
-            mapHeight:10,
-            mapWidth:10,
+            mapHeight:21,
+            mapWidth:21,
             map:[],
             pathMap:[],
             agents:[],
