@@ -28,15 +28,19 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .tile-tool {
     float: left;
     width: 3.2rem;
     height: 3.2rem;
     margin: 0.5rem;
     font-size: 2rem;
-    border: 2px solid black;
     text-align: center;
+
+    img {
+        border: 2px solid black;
+        box-shadow: 1px 1px 2px #868181;
+    }
 }
 
 .selected {

@@ -47,6 +47,10 @@ export default {
             type: Object,
             required: false
         },
+        mapColor: {
+            type: String,
+            required: true
+        },
         showingPath: {
             type: Boolean,
             required: true
@@ -68,6 +72,20 @@ export default {
             required: true
         }
     },
+    watch: {
+        mapColor() {
+            clearTimeout(this.colorUpdateTimeout);
+            this.colorUpdateTimeout = setTimeout(
+                () => { 
+                    this.rgbMapColor = [
+                        parseInt(this.mapColor.substr(1,2), 16),
+                        parseInt(this.mapColor.substr(3,2), 16),
+                        parseInt(this.mapColor.substr(5,2), 16)
+                    ];
+                }
+            , 20);
+        }
+    },
     data() {
         return {
             mapHeight:14,
@@ -82,7 +100,9 @@ export default {
                 road:1,
                 plains:2,
                 mountain:3,
-            }
+            },
+            rgbMapColor: [255,0,0],
+            colorUpdateTimeout: undefined
         }
     },
     created: function() {
@@ -181,7 +201,7 @@ export default {
             if (!this.showingColors || isNaN(this.map[y][x].value))
                 return "rgba(0,0,0,0)";
             else
-                return "rgba(255,0,0," + (this.map[y][x].value / this.maxVal) * 0.7 + ")"
+                return `rgba(${this.rgbMapColor.join(",")},${(this.map[y][x].value / this.maxVal) * 0.7})`;
         },
         step() {
             for (let ind = 0; ind < this.agents.length; ind++)

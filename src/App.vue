@@ -9,6 +9,7 @@
             :showingColors="showingColors"
             :showingTerrain="showingTerrain"
             :showingGridLines="showingGridLines"
+            :mapColor="mapColor"
         />
     </div>
     <div id="ui-container">
@@ -73,6 +74,10 @@
         <ExpandableMenuRow
             :label="'Settings'"
         >
+            <span class="color-label">
+                <input type="color" v-model="mapColor">
+                Value Color
+            </span>
             <Toggle 
                 @toggle="toggleShowingPath" 
                 :onLabel="'Showing Path'"
@@ -145,6 +150,7 @@ export default {
             showingTerrain: true,
             showingGridLines: false,
             gameTick: undefined,
+            mapColor: "#ff0000",
         }
     },
     methods: {
@@ -206,6 +212,10 @@ export default {
 .clickable {
     cursor:pointer;
     user-select: none;
+}
+
+.color-label {
+    font-size: 2rem;
 }
 
 button {
