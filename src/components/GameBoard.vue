@@ -102,6 +102,7 @@ export default {
                 mountain:3,
             },
             rgbMapColor: [255,0,0],
+            generateTimeout: undefined,
             colorUpdateTimeout: undefined
         }
     },
@@ -131,7 +132,15 @@ export default {
                 else 
                     this.setCell(x,y,this.currSelection.value,this.map,"terrain");
             }
-            this.generate();
+            console.log(this.dragging)
+            if (this.dragging) {
+                clearTimeout(this.generateTimeout);
+                this.generateTimeout = setTimeout(
+                    this.generate, 100
+                );
+            }
+            else
+                this.generate();
         },
         placeRoad(x,y) {
             let newX, newY;
@@ -209,6 +218,7 @@ export default {
             this.generate();
         },
         generate() {
+            console.log("Generate")
             let toExpand = [];
             this.maxVal = 0;
             this.resetMap();
