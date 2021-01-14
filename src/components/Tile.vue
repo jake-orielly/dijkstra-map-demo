@@ -19,7 +19,7 @@
             class="terrain-img"
         >
         <span
-            v-if="shouldShow"
+            v-if="shouldShow()"
         >
             {{tile.value}}
         </span>
@@ -51,6 +51,10 @@ export default {
             type: Boolean,
             required: true
         },
+        showingColors: {
+            type: Boolean,
+            required: true
+        },
         showingPath: {
             type: Boolean,
             required: true
@@ -61,6 +65,10 @@ export default {
         },
         showingGridLines: {
             type: Boolean,
+            required: true
+        },
+        rgbMapColor: {
+            type: Array,
             required: true
         }
     },
@@ -73,8 +81,9 @@ export default {
         getColor() {
             if (!this.showingColors || isNaN(this.tile.value))
                 return "rgba(0,0,0,0)";
-            else
+            else {
                 return `rgba(${this.rgbMapColor.join(",")},${(this.tile.value / this.maxVal) * 0.7})`;
+            }
         },
         getImgUrl(item) {
             return utilities.getImgUrl(item);
