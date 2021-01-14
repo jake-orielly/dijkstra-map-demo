@@ -68,6 +68,7 @@
             >
                 <font-awesome-icon :icon="['fas', 'forward']" />
             </button>
+            <br>
             <button @click="$refs.gameBoard.step()">Step</button>
             <button @click="$refs.gameBoard.clearMap()">Clear</button>
         </ExpandableMenuRow>
@@ -222,6 +223,8 @@ button {
     font-size: 2rem;
     border: 2px solid black;
     border-radius: 5px;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .terrain-img {
