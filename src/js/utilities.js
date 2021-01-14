@@ -6,13 +6,8 @@ const cardinalDirs = [
 ];
 
 function getImgUrl(item) {
-    let img;
-    if (item in goals) {
-        img = goals[item].img;
-        return require(`../assets/goals/${img}.png`)
-    }
-    else if (item == "A")
-        return require(`../assets/agent.png`)
+    if (item in goals)
+        return require(`../assets/goals/${item}.png`)
     else
         return require(`../assets/${item}.png`)
 }

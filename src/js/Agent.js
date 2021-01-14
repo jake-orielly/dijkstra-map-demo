@@ -23,7 +23,7 @@ class Agent {
             this.setY(chosenDir[1]);
             this.setX(chosenDir[0]);
             destTile = this.vue.map[chosenDir[1]][chosenDir[0]]
-            destTile.entity = "A";
+            destTile.entity = "agent";
             this.setTerrainDebt(
                 this.vue.getTerrainVal(this.getX(), this.getY()) - 1
             );

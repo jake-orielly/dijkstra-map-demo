@@ -1,11 +1,9 @@
 const goals = {
-    "G": {
-        value: -3,
-        img: "gold-large"
+    "gold-large": {
+        value: -3
     },
-    "g": {
-        value: 0,
-        img: "gold-small"
+    "gold-small": {
+        value: 0
     }
 }
 export default goals;

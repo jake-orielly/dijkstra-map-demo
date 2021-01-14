@@ -93,7 +93,7 @@ export default {
             map:[],
             pathMap:[],
             agents:[],
-            draggable: ["W","E"],
+            draggable: ["erase"],
             maxVal:0,
             dragging: false,
             terrainVals: {
@@ -111,7 +111,7 @@ export default {
     },
 	methods: {
         cellClick(x,y) {
-            if (this.currSelection.value == "E") {
+            if (this.currSelection.value == "erase") {
                 this.setCell(x,y,"",this.map,"value");
                 this.setCell(x,y,undefined,this.map,"entity");
                 this.setCell(x,y,this.getPlainsVal(),this.map,"terrain");
@@ -121,7 +121,7 @@ export default {
             }
             else if (this.currSelection.type == "entity") {
                 this.setCell(x,y,this.currSelection.value,this.map,"entity");
-                if (this.currSelection.value == "A")
+                if (this.currSelection.value == "agent")
                     this.agents.push(new Agent(x, y, this))
             }
             else if (this.currSelection.type == "terrain") {
@@ -244,7 +244,10 @@ export default {
         },
         expand(toExpand) {
             let curr, newVal;
+            let iters = 0;
+            console.time("expand");
             while (toExpand.length) {
+                iters++;
                 curr = toExpand.pop();
                 if (this.isEmpty(curr[0],curr[1]))
                     for (let dir of utilities.cardinalDirs) {
@@ -261,6 +264,19 @@ export default {
                         }
                     }
             }
+            console.log(iters);
+            console.timeEnd("expand");
+        },
+        softSet(x,y,val) {
+            if (
+                (!isNaN(this.map[y][x].value) && val < this.map[y][x].value)
+                || this.map[y][x].value == " "
+            ){
+                this.setCell(x,y,val,this.map,"value");
+                return true;
+            }
+            else
+                return false;
         },
         getTerrainVal(x,y) {
             let terrain = this.map[y][x].terrain;
@@ -281,17 +297,6 @@ export default {
                 this.setCell(chosenDir[0],chosenDir[1],"1",this.pathMap)
                 this.expandPath(chosenDir[0],chosenDir[1], agent);
             }
-        },
-        softSet(x,y,val) {
-            if (
-                (!isNaN(this.map[y][x].value) && val < this.map[y][x].value)
-                || this.map[y][x].value == " "
-            ){
-                this.setCell(x,y,val,this.map,"value");
-                return true;
-            }
-            else
-                return false;
         },
         setCell(x,y,val,arr,prop) {
             let row = arr[y]

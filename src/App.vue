@@ -138,7 +138,7 @@ export default {
     },
     data: function() {
         return {
-            entityTools:["A",...Object.keys(goals),"E"],
+            entityTools:["agent",...Object.keys(goals),"erase"],
             terrainTools:["road","plains","mountain", "wall"],
             currSelection: {
                 value: undefined, 
