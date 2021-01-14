@@ -279,10 +279,10 @@ export default {
                 }
         },
         shouldShowPath(x, y) {
-            // TODO: Fix this
-            // return this.showingPath && this.pathMap[x][y];
-            x;y;
-            return false;
+            if (this.showingPath && this.pathMap[y][x])
+                return true;
+            else
+                return false;
         },
         clearMap() {
             this.map = [];
