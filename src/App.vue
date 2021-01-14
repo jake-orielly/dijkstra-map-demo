@@ -23,7 +23,11 @@
                 @clicked="setSelection(item,'entity')"
                 class="clickable"
             >
-                <span>{{item}}</span>
+                <img 
+                    :src="getImgUrl(item)"
+                    v-bind:alt="item"
+                    class="terrain-img"
+                >
             </TileTool>
         </ExpandableMenuRow>
         <ExpandableMenuRow
@@ -115,6 +119,7 @@ import Slider from './components/Slider.vue'
 import TileTool from './components/TileTool.vue'
 import Toggle from './components/Toggle.vue'
 
+import utilities from './js/utilities.js'
 import goals from './js/goals.js'
 
 export default {
@@ -172,9 +177,8 @@ export default {
             this.showingGridLines = !this.showingGridLines;
         },
         getImgUrl(item) {
-           return require(`./assets/${item}.png`)
+            return utilities.getImgUrl(item);
         }
-
     }
 }
 </script>

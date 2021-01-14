@@ -13,6 +13,11 @@
                 @mouseover="dragEvent(cell - 1, row - 1)"
             >
                 <img 
+                    v-if="map[row - 1][cell - 1].entity"
+                    :src="getImgUrl(map[row - 1][cell - 1].entity)"
+                    class="entity-img"
+                >
+                <img 
                     v-if="showingTerrain"
                     :src="getImgUrl(map[row - 1][cell - 1].terrain)"
                     class="terrain-img"
@@ -33,7 +38,7 @@
 
 <script>
 import Agent from "../js/Agent.js"
-import cardinalDirs from "../js/utilities.js"
+import utilities from "../js/utilities.js"
 import goals from "../js/goals.js"
 
 export default {
@@ -87,13 +92,14 @@ export default {
         cellClick(x,y) {
             if (this.currSelection.value == "E") {
                 this.setCell(x,y,"",this.map,"value");
+                this.setCell(x,y,undefined,this.map,"entity");
                 this.setCell(x,y,this.getPlainsVal(),this.map,"terrain");
                 this.agents = this.agents.filter(
                     agent => agent.getX() != x || agent.getY() != y
                 );
             }
             else if (this.currSelection.type == "entity") {
-                this.setCell(x,y,this.currSelection.value,this.map,"value");
+                this.setCell(x,y,this.currSelection.value,this.map,"entity");
                 if (this.currSelection.value == "A")
                     this.agents.push(new Agent(x, y, this))
             }
@@ -111,7 +117,7 @@ export default {
             let newX, newY;
             let value = this.computeTileNeighborValue(x,y,this.currSelection.value);
             this.setCell(x,y,value,this.map,"terrain");
-            for (let dir of cardinalDirs) {
+            for (let dir of utilities.cardinalDirs) {
                 newX = x + dir[1];
                 newY = y + dir[0];
                 // When we place a new road, we need to update the old ones
@@ -129,7 +135,7 @@ export default {
                 "0-1":11
             };
             let roadTotal = 0;
-            for (let dir of cardinalDirs) {
+            for (let dir of utilities.cardinalDirs) {
                 newX = x + dir[1];
                 newY = y + dir[0];
                 if (this.onBoard(newX, newY) && this.map[newY][newX].terrain.substr(0,4) == type) {
@@ -188,15 +194,15 @@ export default {
             this.resetMap();
             for (let y = 0; y < this.mapHeight; y++)
                 for (let x = 0; x < this.mapWidth; x++) 
-                    if (this.map[y][x].value in goals)
-                        for (let dir of cardinalDirs) {
+                    if (this.map[y][x].entity in goals)
+                        for (let dir of utilities.cardinalDirs) {
                             let newX = x + dir[0];
                             let newY = y + dir[1];
                             if (this.onBoard(newX,newY)) {
                                 this.softSet(
                                     newX,
                                     newY,
-                                    this.getTerrainVal(newX, newY) + goals[this.map[y][x].value]
+                                    this.getTerrainVal(newX, newY) + goals[this.map[y][x].entity].value
                                 );
                                 toExpand.push([newX,newY])
                             }
@@ -213,7 +219,7 @@ export default {
             while (toExpand.length) {
                 curr = toExpand.pop();
                 if (this.isEmpty(curr[0],curr[1]))
-                    for (let dir of cardinalDirs) {
+                    for (let dir of utilities.cardinalDirs) {
                         let newX = curr[0] + dir[0];
                         let newY = curr[1] + dir[1];
                         if (this.onBoard(newX,newY)) {
@@ -286,6 +292,7 @@ export default {
                 for (let x = 0; x < this.mapWidth; x++) {
                     this.map[y].push({
                         value:"",
+                        entity:undefined,
                         terrain:this.getPlainsVal()
                     });
                     this.pathMap[y].push("");
@@ -296,7 +303,7 @@ export default {
             return `plains/plains-${parseInt(Math.random() * 4)}`;
         },
         getImgUrl(item) {
-            return require(`../assets/${item}.png`)
+            return utilities.getImgUrl(item);
         }
     }
 };
@@ -325,11 +332,18 @@ span {
     z-index: 3;
 }
 
-.terrain-img {
+.terrain-img, .entity-img {
     position: absolute;
     top: 0;
     left: 0;
+}
+
+.terrain-img {
     z-index: -1;
+}
+
+.entity-img {
+    z-index: 2;
 }
 
 .path-node {
