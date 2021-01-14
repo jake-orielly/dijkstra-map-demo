@@ -235,7 +235,7 @@ export default {
             let terrain = this.map[y][x].terrain;
             if (terrain.substr(0,4) == "road")
                 terrain = "road";
-            else if (terrain.substr(0,5) == "plains")
+            else if (terrain.substr(0,6) == "plains")
                 terrain = "plains";
             return this.terrainVals[terrain];
         },
