@@ -67,6 +67,10 @@ export default {
             type: Boolean,
             required: true
         },
+        maxVal: {
+            type: Number,
+            required: true
+        },
         rgbMapColor: {
             type: Array,
             required: true
@@ -79,11 +83,10 @@ export default {
             return this.showingValues || isNaN(this.tile.value)
         },
         getColor() {
-            if (!this.showingColors || isNaN(this.tile.value))
+            if (!this.showingColors || this.tile.value == " ")
                 return "rgba(0,0,0,0)";
-            else {
+            else
                 return `rgba(${this.rgbMapColor.join(",")},${(this.tile.value / this.maxVal) * 0.7})`;
-            }
         },
         getImgUrl(item) {
             return utilities.getImgUrl(item);

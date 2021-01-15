@@ -15,6 +15,7 @@
                 :showingColors="showingColors"
                 :showingTerrain="showingTerrain"
                 :showingPath="shouldShowPath(cell - 1, row - 1)"
+                :maxVal="maxVal"
                 :rgbMapColor="rgbMapColor"
                 @click="cellClick"
                 @setDrag="setDrag"
@@ -202,6 +203,8 @@ export default {
                 for (let x = 0; x < this.mapWidth; x++) 
                     if (this.map[y][x].entity in goals)
                         toExpand.push([x,y,goals[this.map[y][x].entity].value])
+            if (!toExpand)
+                this.clearVals();
             this.expand(toExpand);
             this.generatePath();
             for (let y = 0; y < this.mapHeight; y++)
@@ -228,6 +231,9 @@ export default {
                         }
                     }
             }
+        },
+        clearVals() {
+
         },
         softSet(x,y,val) {
             if (
