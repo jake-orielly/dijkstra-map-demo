@@ -139,7 +139,7 @@ export default {
     },
     data: function() {
         return {
-            entityTools:["agent",...Object.keys(goals),"erase"],
+            entityTools:["dwarf","monster",...Object.keys(goals),"erase"],
             terrainTools:["road","plains","mountain", "wall"],
             currSelection: {
                 value: undefined, 

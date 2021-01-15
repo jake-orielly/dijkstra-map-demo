@@ -28,7 +28,7 @@
 <script>
 import Tile from "./Tile.vue"
 
-import Agent from "../js/Agent.js"
+import Dwarf from "../js/Dwarf.js"
 import utilities from "../js/utilities.js"
 import goals from "../js/goals.js"
 
@@ -86,7 +86,7 @@ export default {
             mapWidth:21,
             map:[],
             pathMap:[],
-            agents:[],
+            dwarfs:[],
             draggable: ["erase"],
             maxVal:0,
             dragging: false,
@@ -108,14 +108,14 @@ export default {
                 this.setCell(x,y,"",this.map,"value");
                 this.setCell(x,y,undefined,this.map,"entity");
                 this.setCell(x,y,this.getPlainsVal(),this.map,"terrain");
-                this.agents = this.agents.filter(
-                    agent => agent.getX() != x || agent.getY() != y
+                this.dwarfs = this.dwarfs.filter(
+                    dwarf => dwarf.getX() != x || dwarf.getY() != y
                 );
             }
             else if (this.currSelection.type == "entity") {
                 this.setCell(x,y,this.currSelection.value,this.map,"entity");
-                if (this.currSelection.value == "agent")
-                    this.agents.push(new Agent(x, y, this))
+                if (this.currSelection.value == "dwarf")
+                    this.dwarfs.push(new Dwarf(x, y, this))
                 else if (this.currSelection.value in goals)
                     this.setCell(x,y,goals[this.currSelection.value].value,this.map,"value");
             }
@@ -182,7 +182,7 @@ export default {
         isValidMove(x,y) {
             if (this.map[y][x].terrain.substr(0,4) == "wall")
                 return false;
-            else if (this.map[y][x].entity == "agent")
+            else if (this.map[y][x].entity == "dwarf")
                 return false;
             else
                 return true;
@@ -191,8 +191,8 @@ export default {
             return x >= 0 && x < this.mapWidth && y >= 0 && y < this.mapHeight;
         },
         step() {
-            for (let ind = 0; ind < this.agents.length; ind++)
-                this.agents[ind].step();
+            for (let ind = 0; ind < this.dwarfs.length; ind++)
+                this.dwarfs[ind].step();
             this.generate();
         },
         generate() {
@@ -255,15 +255,15 @@ export default {
             return this.terrainVals[terrain];
         },
         generatePath() {
-            for (let agent of this.agents)
-                this.expandPath(agent.getX(),agent.getY(), agent)
+            for (let dwarf of this.dwarfs)
+                this.expandPath(dwarf.getX(),dwarf.getY(), dwarf)
         },
-        expandPath(x,y,agent) {
+        expandPath(x,y,dwarf) {
             this.setCell(x,y,"1",this.pathMap);
-            let chosenDir = agent.getNextStep(x,y);
+            let chosenDir = dwarf.getNextStep(x,y);
             if (chosenDir) {
                 this.setCell(chosenDir[0],chosenDir[1],"1",this.pathMap)
-                this.expandPath(chosenDir[0],chosenDir[1], agent);
+                this.expandPath(chosenDir[0],chosenDir[1], dwarf);
             }
         },
         setCell(x,y,val,arr,prop) {
@@ -295,7 +295,7 @@ export default {
         clearMap() {
             this.map = [];
             this.pathMap = [];
-            this.agents = [];
+            this.dwarfs = [];
             for (let y = 0; y < this.mapHeight; y++) {
                 this.map.push([]);
                 this.pathMap.push([]);
