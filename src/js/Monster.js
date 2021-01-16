@@ -1,6 +1,5 @@
 import Agent from "./Agent.js"
 import utilities from "./utilities.js"
-import goals from "./goals.js"
 
 class Monster extends Agent {
     constructor(x, y, vue) {
@@ -8,8 +7,15 @@ class Monster extends Agent {
         this.type = "monster"
     }
 
+    step() {
+        Agent.prototype.step.call(this);
+        for (let i = 0; i < this.vue.agents.length; i++)
+            if(this.vue.agents[i].x == this.x && this.vue.agents[i].y == this.y && this.vue.agents[i].type == "dwarf")
+                this.vue.agents.splice(i, 1)
+    }
+
     getNextStep(x, y) {
-        let curr, newX, newY, newItem, inFrontier; 
+        let curr, newX, newY, newItem, inFrontier, dwarfMap; 
         let frontier = [{
             x: x,
             y: y,
@@ -19,7 +25,10 @@ class Monster extends Agent {
             p: 0
         }];
         let interior = {};
-        while (frontier.length && !(this.vue.map[frontier[0].y][frontier[0].x].entity in goals)) {
+        let dwarves = this.vue.agents.filter(agent => agent.type == "dwarf");
+        if (!dwarves.length)
+            return undefined;
+        while (frontier.length && !(this.vue.map[frontier[0].y][frontier[0].x].entity == "dwarf")) {
             curr = frontier.shift();
             interior[`${curr.x}-${curr.y}`] = true;
             for (let dir of utilities.cardinalDirs) {
@@ -31,8 +40,9 @@ class Monster extends Agent {
                     x: newX,
                     y: newY,
                     h: curr.g + this.vue.getTerrainVal(newX, newY),
-                    g: this.vue.map[newY][newX].value
                 }
+                dwarfMap = dwarves.map(d => Math.abs(d.x - newX) + Math.abs(d.y - newY))
+                newItem.g = Math.min.apply(Math, dwarfMap)
                 newItem.p = newItem.h + newItem.g;
                 newItem.solution = (curr.solution ? curr.solution : [newX, newY])
                 inFrontier = false;
@@ -59,7 +69,7 @@ class Monster extends Agent {
             }
         }
         if (!frontier.length)
-            return [x, y];
+            return undefined;
         return frontier[0].solution;
     }
 }

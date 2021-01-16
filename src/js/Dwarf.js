@@ -31,7 +31,6 @@ class Dwarf extends Agent {
                 }
             }
         }
-        console.log(chosenDir)
         if (minVal < currVal || (x == this.getX() && y == this.getY()))
             return chosenDir;
     }

@@ -185,7 +185,7 @@ export default {
         isValidMove(x,y) {
             if (this.map[y][x].terrain.substr(0,4) == "wall")
                 return false;
-            else if (this.map[y][x].entity == "dwarf" || this.map[y][x].entity == "monster")
+            else if (this.map[y][x].entity == "monster")
                 return false;
             else
                 return true;
