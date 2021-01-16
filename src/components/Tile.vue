@@ -3,9 +3,8 @@
         class="clickable"
         :style="{ backgroundColor: getColor(),
         border: (showingGridLines ? '1px solid black' : '')}"
-        @click="$emit('click', x, y)"
         @mousedown="$emit('setDrag',x, y, true)"
-        @mouseup="$emit('setDrag',x, y, false)"
+        @mouseup="$emit('setDrag',x, y, false); $emit('click', x, y)"
         @mouseover="$emit('dragEvent',x, y)"
     >
         <img 
