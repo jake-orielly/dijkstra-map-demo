@@ -43,7 +43,8 @@ class Monster extends Agent {
                 }
                 dwarfMap = dwarves.map(d => Math.abs(d.x - newX) + Math.abs(d.y - newY))
                 newItem.g = Math.min.apply(Math, dwarfMap)
-                newItem.p = newItem.h + newItem.g;
+                // Third term means, in tie breaker scenarios, monster will perfer tiles nearer treasure
+                newItem.p = newItem.h + newItem.g + (this.vue.map[newY][newX].value/100);
                 newItem.solution = (curr.solution ? curr.solution : [newX, newY])
                 inFrontier = false;
                 for (let i = frontier.length - 1; i >= 0; i--) {
@@ -57,7 +58,12 @@ class Monster extends Agent {
                 }
                 if (!inFrontier) {
                     for (let i = frontier.length - 1; i >= 0; i--) {
-                        if (newItem.p >= frontier[i].p) {
+                        if (newItem.p > frontier[i].p) {
+                            frontier.splice(i + 1, 0, newItem)
+                            inFrontier = true;
+                            break;
+                        }
+                        else if (newItem.p == frontier[i].p) {
                             frontier.splice(i + 1, 0, newItem)
                             inFrontier = true;
                             break;
