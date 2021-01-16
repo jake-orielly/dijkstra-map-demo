@@ -229,6 +229,8 @@ export default {
                         if (this.onBoard(newX,newY)) {
                             if (this.map[newY][newX].entity in goals)
                                 newVal = goals[this.map[newY][newX].entity].value;
+                            else if (this.getTerrainVal(newX, newY) == undefined)
+                                newVal = undefined;
                             else
                                 newVal = curr[2] + this.getTerrainVal(newX, newY);
                             if (this.softSet(newX,newY,newVal)) {
