@@ -1,0 +1,72 @@
+<template>
+    <div id="tutorial-container">
+        <div id="tutorial-content-container">
+            <h1>
+                Tutorial
+            </h1>
+            <TableOfContents
+                :sections="sections"
+            />
+            <div id="tutorial-control-container">
+                <button>Back</button>
+                <button>Next</button>
+                <button>Skip</button>
+            </div>
+        </div>
+        <div id="tutorial-shade"></div>
+    </div>
+</template>
+
+<script>
+import TableOfContents from './TableOfContents.vue'
+export default {
+    components: {
+        TableOfContents
+    },
+    data() {
+        return {
+            sections: [
+                "Part 1",
+                "Part 2"
+            ]
+        }
+	},
+	methods: {
+	}
+};
+</script>
+
+<style scoped>
+h1 {
+    text-align: center;
+}
+
+#tutorial-container, #tutorial-shade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+#tutorial-shade {
+    background-color: rgba(29, 28, 28, 0.733);
+}
+
+#tutorial-content-container {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    background-color: white;
+    width: 50%;
+    height: 50%;
+}
+
+#tutorial-control-container {
+    position: absolute;
+    right: 2rem;
+    bottom: 2rem;
+}
+</style>

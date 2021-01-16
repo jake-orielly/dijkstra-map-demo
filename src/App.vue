@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Tutorial/>
     <div id="board-container">
         <GameBoard
             ref="gameBoard"
@@ -124,6 +125,7 @@ import ExpandableMenuRow from './components/ExpandableMenuRow.vue'
 import Slider from './components/Slider.vue'
 import TileTool from './components/TileTool.vue'
 import Toggle from './components/Toggle.vue'
+import Tutorial from './components/Tutorial'
 
 import utilities from './js/utilities.js'
 import goals from './js/goals.js'
@@ -136,6 +138,7 @@ export default {
         Slider,
         TileTool,
         Toggle,
+        Tutorial
     },
     data: function() {
         return {
