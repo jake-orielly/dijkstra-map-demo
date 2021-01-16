@@ -105,6 +105,7 @@ export default {
     },
 	methods: {
         cellClick(x,y) {
+            let newX, newY, currTerrain;
             if (this.currSelection.value == "erase") {
                 this.setCell(x,y,undefined,this.map,"value");
                 this.setCell(x,y,undefined,this.map,"entity");
@@ -124,15 +125,23 @@ export default {
             }
             else if (this.currSelection.type == "terrain") {
                 if (this.currSelection.value == "road" || this.currSelection.value == "wall") 
-                    this.placeRoad(x,y);
+                    this.placeRoad(x,y,this.currSelection.value);
                 else 
                     this.setCell(x,y,this.currSelection.value,this.map,"terrain");
             }
+            for (let dir of utilities.cardinalDirs) {
+                newX = x + dir[0];
+                newY = y + dir[1];
+                currTerrain = this.map[newY][newX].terrain[0].substr(0, 4);
+                if (currTerrain == "road" || currTerrain == "wall") {
+                    this.placeRoad(newX,newY,currTerrain);
+                }
+            }
             this.generate();
         },
-        placeRoad(x,y) {
+        placeRoad(x,y, type) {
             let newX, newY;
-            let value = this.computeTileNeighborValue(x,y,this.currSelection.value);
+            let value = this.computeTileNeighborValue(x,y,type);
             this.setCell(x,y,value,this.map,"terrain");
             for (let dir of utilities.cardinalDirs) {
                 newX = x + dir[1];

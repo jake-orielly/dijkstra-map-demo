@@ -147,7 +147,7 @@ export default {
             },
             showingPath: true,
             showingValues: false,
-            showingColors: true,
+            showingColors: false,
             showingTerrain: true,
             showingGridLines: false,
             gameTick: undefined,
