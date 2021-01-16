@@ -1,5 +1,6 @@
 import Agent from "./Agent.js"
 import utilities from "./utilities.js"
+import goals from "./goals.js"
 
 class Monster extends Agent {
     constructor(x, y, vue) {
@@ -21,6 +22,7 @@ class Monster extends Agent {
 
     getNextStep(x, y) {
         let curr, newX, newY, newItem, inFrontier, dwarfMap, lastMovePenalty, terrainVal; 
+        let invalidEntities = ["monster", ...Object.keys(goals)];
         let frontier = [{
             x: x,
             y: y,
@@ -39,7 +41,10 @@ class Monster extends Agent {
             for (let dir of utilities.cardinalDirs) {
                 newX = curr.x + dir[1];
                 newY = curr.y + dir[0];
-                if (!this.vue.onBoard(newX, newY) || !this.vue.isValidMove(newX, newY) || interior[`${newX}-${newY}`])
+                if (!this.vue.onBoard(newX, newY) || 
+                    !this.vue.isValidMove(newX, newY) || 
+                    invalidEntities.indexOf(this.vue.map[newY][newX].entity) != -1 ||
+                    interior[`${newX}-${newY}`])
                     continue
                 newItem = {
                     x: newX,
