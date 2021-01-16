@@ -27,7 +27,7 @@ class Agent {
             );
         }
     }
-    
+
     getNextStep(x, y) {
         return [x, y]
     }

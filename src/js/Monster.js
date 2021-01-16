@@ -4,7 +4,7 @@ import goals from "./goals.js"
 
 class Monster extends Agent {
     constructor(x, y, vue) {
-        super(x,y,vue);
+        super(x, y, vue);
         this.type = "monster"
         this.lastMove = [-1, -1];
     }
@@ -16,12 +16,14 @@ class Monster extends Agent {
         if (this.x != oldX || this.y != oldY)
             this.lastMove = [oldX, oldY];
         for (let i = 0; i < this.vue.agents.length; i++)
-            if(this.vue.agents[i].x == this.x && this.vue.agents[i].y == this.y && this.vue.agents[i].type == "dwarf")
+            if (this.vue.agents[i].x == this.x && 
+                this.vue.agents[i].y == this.y && 
+                this.vue.agents[i].type == "dwarf")
                 this.vue.agents.splice(i, 1);
     }
 
     getNextStep(x, y) {
-        let curr, newX, newY, newItem, inFrontier, dwarfMap, lastMovePenalty, terrainVal; 
+        let curr, newX, newY, newItem, inFrontier, dwarfMap, lastMovePenalty, terrainVal;
         let invalidEntities = ["monster", ...Object.keys(goals)];
         let frontier = [{
             x: x,
@@ -41,8 +43,8 @@ class Monster extends Agent {
             for (let dir of utilities.cardinalDirs) {
                 newX = curr.x + dir[1];
                 newY = curr.y + dir[0];
-                if (!this.vue.onBoard(newX, newY) || 
-                    !this.vue.isValidMove(newX, newY) || 
+                if (!this.vue.onBoard(newX, newY) ||
+                    !this.vue.isValidMove(newX, newY) ||
                     invalidEntities.indexOf(this.vue.map[newY][newX].entity) != -1 ||
                     interior[`${newX}-${newY}`])
                     continue
@@ -57,7 +59,7 @@ class Monster extends Agent {
                 // Heavy penalty for the tile we were just on, prevent back and forth
                 lastMovePenalty = (this.lastMove[0] == newItem.solution[0] && this.lastMove[1] == newItem.solution[1] ? 0.5 : 0)
                 // Slight penalty for tiles based on distance from nearest treasure
-                terrainVal = (this.vue.map[newY][newX].value == undefined ? 0 : this.vue.map[newY][newX].value/1000);
+                terrainVal = (this.vue.map[newY][newX].value == undefined ? 0 : this.vue.map[newY][newX].value / 1000);
                 newItem.p = newItem.h + newItem.g + lastMovePenalty + terrainVal;
                 inFrontier = false;
                 for (let i = frontier.length - 1; i >= 0; i--) {

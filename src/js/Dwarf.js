@@ -4,7 +4,7 @@ import goals from "./goals.js"
 
 class Dwarf extends Agent {
     constructor(x, y, vue) {
-        super(x,y,vue);
+        super(x, y, vue);
         this.type = "dwarf"
     }
 
