@@ -25,14 +25,13 @@ class Dwarf extends Agent {
                     newVal = goals[newTile.entity].value;
                 else if (!isNaN(parseInt(newTile.value)))
                     newVal = newTile.value;
-                else
-                    continue
-            }
-            if (minVal == undefined || newVal < minVal) {
-                minVal = newVal;
-                chosenDir = [newX, newY];
+                if ((minVal == undefined && newVal) || newVal < minVal) {
+                    minVal = newVal;
+                    chosenDir = [newX, newY];
+                }
             }
         }
+        console.log(chosenDir)
         if (minVal < currVal || (x == this.getX() && y == this.getY()))
             return chosenDir;
     }
