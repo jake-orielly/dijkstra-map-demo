@@ -5,17 +5,22 @@ class Monster extends Agent {
     constructor(x, y, vue) {
         super(x,y,vue);
         this.type = "monster"
+        this.lastMove = [-1, -1];
     }
 
     step() {
+        let oldX = this.x;
+        let oldY = this.y;
         Agent.prototype.step.call(this);
+        if (this.x != oldX || this.y != oldY)
+            this.lastMove = [oldX, oldY];
         for (let i = 0; i < this.vue.agents.length; i++)
             if(this.vue.agents[i].x == this.x && this.vue.agents[i].y == this.y && this.vue.agents[i].type == "dwarf")
-                this.vue.agents.splice(i, 1)
+                this.vue.agents.splice(i, 1);
     }
 
     getNextStep(x, y) {
-        let curr, newX, newY, newItem, inFrontier, dwarfMap; 
+        let curr, newX, newY, newItem, inFrontier, dwarfMap, lastMovePenalty; 
         let frontier = [{
             x: x,
             y: y,
@@ -43,9 +48,11 @@ class Monster extends Agent {
                 }
                 dwarfMap = dwarves.map(d => Math.abs(d.x - newX) + Math.abs(d.y - newY))
                 newItem.g = Math.min.apply(Math, dwarfMap)
-                // Third term means, in tie breaker scenarios, monster will perfer tiles nearer treasure
-                newItem.p = newItem.h + newItem.g + (this.vue.map[newY][newX].value/100);
                 newItem.solution = (curr.solution ? curr.solution : [newX, newY])
+                // Heavy penalty for the tile we were just on, prevent back and forth
+                lastMovePenalty = (this.lastMove[0] == newItem.solution[0] && this.lastMove[1] == newItem.solution[1] ? 0.5 : 0)
+                // Fourth term means, in tie breaker scenarios, monster will perfer tiles nearer treasure
+                newItem.p = newItem.h + newItem.g + lastMovePenalty + (this.vue.map[newY][newX].value/1000);
                 inFrontier = false;
                 for (let i = frontier.length - 1; i >= 0; i--) {
                     if (newX == frontier[i].x && newY == frontier[i].y) {
