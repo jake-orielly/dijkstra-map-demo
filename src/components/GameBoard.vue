@@ -264,7 +264,7 @@ export default {
         expandPath(x,y,agent) {
             this.setCell(x,y,"1",this.pathMap);
             let chosenDir = agent.getNextStep(x,y);
-            if (chosenDir) {
+            if (chosenDir && !(chosenDir[0] == x && chosenDir[1] == y)) {
                 this.setCell(chosenDir[0],chosenDir[1],"1",this.pathMap)
                 this.expandPath(chosenDir[0],chosenDir[1], agent);
             }
