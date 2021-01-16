@@ -21,6 +21,8 @@ class Dwarf extends Agent {
             newY = y + dir[0];
             if (this.vue.onBoard(newX, newY)) {
                 newTile = this.vue.map[newY][newX];
+                if (newTile.entity == "dwarf" || newTile.entity == "monster")
+                    continue;
                 if (newTile.entity in goals)
                     newVal = goals[newTile.entity].value;
                 else if (!isNaN(parseInt(newTile.value)))
