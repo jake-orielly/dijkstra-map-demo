@@ -108,7 +108,7 @@ export default {
             if (this.currSelection.value == "erase") {
                 this.setCell(x,y,undefined,this.map,"value");
                 this.setCell(x,y,undefined,this.map,"entity");
-                this.setCell(x,y,this.getPlainsVal(),this.map,"terrain");
+                this.setCell(x,y,undefined,this.map,"terrain");
                 this.agents = this.agents.filter(
                     agent => agent.getX() != x || agent.getY() != y
                 );
@@ -116,7 +116,7 @@ export default {
             else if (this.currSelection.type == "entity") {
                 this.setCell(x,y,this.currSelection.value,this.map,"entity");
                 if (this.currSelection.value == "dwarf")
-                    this.agents.push(new Dwarf(x, y, this))
+                    this.agents.unshift(new Dwarf(x, y, this))
                 else if (this.currSelection.value == "monster")
                     this.agents.push(new Monster(x, y, this))
                 else if (this.currSelection.value in goals)
@@ -125,8 +125,6 @@ export default {
             else if (this.currSelection.type == "terrain") {
                 if (this.currSelection.value == "road" || this.currSelection.value == "wall") 
                     this.placeRoad(x,y);
-                else if (this.currSelection.value == "plains")
-                    this.setCell(x,y,this.getPlainsVal,this.map,"terrain");
                 else 
                     this.setCell(x,y,this.currSelection.value,this.map,"terrain");
             }
@@ -140,7 +138,7 @@ export default {
                 newX = x + dir[1];
                 newY = y + dir[0];
                 // When we place a new road, we need to update the old ones
-                if (this.onBoard(newX, newY) && this.map[newY][newX].terrain.substr(0,4) == this.currSelection.value) {
+                if (this.onBoard(newX, newY) && this.map[newY][newX].terrain[0].substr(0,4) == this.currSelection.value) {
                     this.setCell(newX,newY,this.computeTileNeighborValue(newX,newY,this.currSelection.value),this.map,"terrain");
                 }
             }
@@ -157,7 +155,7 @@ export default {
             for (let dir of utilities.cardinalDirs) {
                 newX = x + dir[1];
                 newY = y + dir[0];
-                if (this.onBoard(newX, newY) && this.map[newY][newX].terrain.substr(0,4) == type) {
+                if (this.onBoard(newX, newY) && this.map[newY][newX].terrain[0].substr(0,4) == type) {
                     roadTotal += primeMap["" + dir[0] + dir[1]];
                 }
             }
@@ -183,7 +181,7 @@ export default {
             this.dragging = false;
         },
         isValidMove(x,y) {
-            if (this.map[y][x].terrain.substr(0,4) == "wall")
+            if (this.map[y][x].terrain[0].substr(0,4) == "wall")
                 return false;
             else if (this.map[y][x].entity == "monster")
                 return false;
@@ -252,7 +250,7 @@ export default {
                 return false;
         },
         getTerrainVal(x,y) {
-            let terrain = this.map[y][x].terrain;
+            let terrain = this.map[y][x].terrain[0];
             if (terrain.substr(0,4) == "road")
                 terrain = "road";
             else if (terrain.substr(0,6) == "plains")
@@ -273,11 +271,17 @@ export default {
         },
         setCell(x,y,val,arr,prop) {
             let row = arr[y]
-            if (prop && arr[y][x][prop] != val) {
+            if (prop == "terrain") {
+                if (row[x][prop].length > 1)
+                    row[x][prop].shift();
+                if (val != undefined && val != "plains") 
+                    row[x][prop].unshift(val);
+            }
+            else if (prop && arr[y][x][prop] != val) {
                 row[x][prop] = val;
                 this.$set(arr, y, row);
             }
-            else if (!prop && typeof val == "string") {
+            else if (!prop && val[0]) {
                 if (row[x].indexOf(val) == -1) {
                     row[x].push(val);
                     this.$set(arr, y, row);
@@ -313,7 +317,7 @@ export default {
                     this.map[y].push({
                         value:undefined,
                         entity:undefined,
-                        terrain:this.getPlainsVal()
+                        terrain:[this.getPlainsVal()]
                     });
                     this.pathMap[y].push([]);
                 }

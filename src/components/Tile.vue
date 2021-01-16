@@ -14,8 +14,9 @@
             class="entity-img"
         >
         <img 
-            v-if="showingTerrain"
-            :src="getImgUrl(tile.terrain)"
+            v-for="terrain in tile.terrain.slice().reverse()"
+            v-bind:key="`${x}-${y}-${terrain}`"
+            :src="getImgUrl(terrain)"
             class="terrain-img"
         >
         <span
@@ -82,7 +83,7 @@ export default {
     },
 	methods: {
         shouldShow() {
-            if (this.tile.terrain.substr(0,4) == "wall" || this.tile.entity)
+            if (this.tile.terrain[0].substr(0,4) == "wall" || this.tile.entity)
                 return false;
             return this.showingValues || isNaN(this.tile.value)
         },
