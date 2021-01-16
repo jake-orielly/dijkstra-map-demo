@@ -20,7 +20,7 @@ class Monster extends Agent {
     }
 
     getNextStep(x, y) {
-        let curr, newX, newY, newItem, inFrontier, dwarfMap, lastMovePenalty; 
+        let curr, newX, newY, newItem, inFrontier, dwarfMap, lastMovePenalty, terrainVal; 
         let frontier = [{
             x: x,
             y: y,
@@ -51,8 +51,9 @@ class Monster extends Agent {
                 newItem.solution = (curr.solution ? curr.solution : [newX, newY])
                 // Heavy penalty for the tile we were just on, prevent back and forth
                 lastMovePenalty = (this.lastMove[0] == newItem.solution[0] && this.lastMove[1] == newItem.solution[1] ? 0.5 : 0)
-                // Fourth term means, in tie breaker scenarios, monster will perfer tiles nearer treasure
-                newItem.p = newItem.h + newItem.g + lastMovePenalty + (this.vue.map[newY][newX].value/1000);
+                // Slight penalty for tiles based on distance from nearest treasure
+                terrainVal = (this.vue.map[newY][newX].value == undefined ? 0 : this.vue.map[newY][newX].value/1000);
+                newItem.p = newItem.h + newItem.g + lastMovePenalty + terrainVal;
                 inFrontier = false;
                 for (let i = frontier.length - 1; i >= 0; i--) {
                     if (newX == frontier[i].x && newY == frontier[i].y) {
