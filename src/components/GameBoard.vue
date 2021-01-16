@@ -106,7 +106,7 @@ export default {
 	methods: {
         cellClick(x,y) {
             if (this.currSelection.value == "erase") {
-                this.setCell(x,y,"",this.map,"value");
+                this.setCell(x,y,undefined,this.map,"value");
                 this.setCell(x,y,undefined,this.map,"entity");
                 this.setCell(x,y,this.getPlainsVal(),this.map,"terrain");
                 this.agents = this.agents.filter(
@@ -238,12 +238,12 @@ export default {
         clearVals() {
             for (let y = 0; y < this.mapHeight; y++)
                 for (let x = 0; x < this.mapWidth; x++) 
-                    this.setCell(x,y," ",this.map,"value");
+                    this.setCell(x,y,undefined,this.map,"value");
         },
         softSet(x,y,val) {
             if (
                 (!isNaN(this.map[y][x].value) && val < this.map[y][x].value)
-                || this.map[y][x].value == " "
+                || this.map[y][x].value === undefined
             ){
                 this.setCell(x,y,val,this.map,"value");
                 return true;
@@ -286,9 +286,9 @@ export default {
             for (let y = 0; y < this.mapHeight; y++)
                 for (let x = 0; x < this.mapWidth; x++) {
                     if (!isNaN(this.map[y][x].value))
-                        this.setCell(x,y," ",this.map,"value");
+                        this.setCell(x,y,undefined,this.map,"value");
                     if (!isNaN(this.pathMap[y][x]))
-                        this.setCell(x,y,"",this.pathMap);
+                        this.setCell(x,y,undefined,this.pathMap);
                 }
         },
         shouldShowPath(x, y) {
@@ -306,11 +306,11 @@ export default {
                 this.pathMap.push([]);
                 for (let x = 0; x < this.mapWidth; x++) {
                     this.map[y].push({
-                        value:"",
+                        value:undefined,
                         entity:undefined,
                         terrain:this.getPlainsVal()
                     });
-                    this.pathMap[y].push("");
+                    this.pathMap[y].push(undefined);
                 }
             }
         },
