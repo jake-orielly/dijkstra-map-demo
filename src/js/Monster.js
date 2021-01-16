@@ -9,32 +9,58 @@ class Monster extends Agent {
     }
 
     getNextStep(x, y) {
-        let minVal, chosenDir, newX, newY, newVal, newTile;
-        let currVal = this.vue.map[y][x].value;
-        if (this.vue.map[y][x].entity in goals)
-            currVal = goals[this.vue.map[y][x].entity].value;
-        // parseInt b/c of weird behavior isNaN(" ") => false
-        if (!isNaN(parseInt(this.vue.map[y][x].value)))
-            minVal = this.vue.map[y][x].value;
-        for (let dir of utilities.cardinalDirs) {
-            newX = x + dir[1];
-            newY = y + dir[0];
-            if (this.vue.onBoard(newX, newY)) {
-                newTile = this.vue.map[newY][newX];
-                if (newTile.entity in goals)
-                    newVal = goals[newTile.entity].value;
-                else if (!isNaN(parseInt(newTile.value)))
-                    newVal = newTile.value;
-                else
+        let curr, newX, newY, newItem, inFrontier; 
+        let frontier = [{
+            x: x,
+            y: y,
+            g: 0,
+            // Because the tile under an agent has not value, we can't actually calculate this, but we don't need to
+            h: 0,
+            p: 0
+        }];
+        let interior = {};
+        while (frontier.length && !(this.vue.map[frontier[0].y][frontier[0].x].entity in goals)) {
+            curr = frontier.shift();
+            interior[`${curr.x}-${curr.y}`] = true;
+            for (let dir of utilities.cardinalDirs) {
+                newX = curr.x + dir[1];
+                newY = curr.y + dir[0];
+                if (!this.vue.onBoard(newX, newY) || !this.vue.isValidMove(newX, newY) || interior[`${newX}-${newY}`])
                     continue
-            }
-            if (minVal == undefined || newVal < minVal) {
-                minVal = newVal;
-                chosenDir = [newX, newY];
+                newItem = {
+                    x: newX,
+                    y: newY,
+                    h: curr.g + this.vue.getTerrainVal(newX, newY),
+                    g: this.vue.map[newY][newX].value
+                }
+                newItem.p = newItem.h + newItem.g;
+                newItem.solution = (curr.solution ? curr.solution : [newX, newY])
+                inFrontier = false;
+                for (let i = frontier.length - 1; i >= 0; i--) {
+                    if (newX == frontier[i].x && newY == frontier[i].y) {
+                        if (newItem.p < frontier[i].p)
+                            frontier.splice(i, 1);
+                        else
+                            inFrontier = true;
+                        break;
+                    }
+                }
+                if (!inFrontier) {
+                    for (let i = frontier.length - 1; i >= 0; i--) {
+                        if (newItem.p >= frontier[i].p) {
+                            frontier.splice(i + 1, 0, newItem)
+                            inFrontier = true;
+                            break;
+                        }
+                    }
+                    if (!inFrontier)
+                        frontier.unshift(newItem)
+                }
             }
         }
-        if (minVal < currVal || (x == this.getX() && y == this.getY()))
-            return chosenDir;
+        if (!frontier.length)
+            return [x, y];
+        return frontier[0].solution;
     }
 }
 
