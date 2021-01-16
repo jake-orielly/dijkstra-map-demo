@@ -132,9 +132,10 @@ export default {
             for (let dir of utilities.cardinalDirs) {
                 newX = x + dir[0];
                 newY = y + dir[1];
-                currTerrain = this.map[newY][newX].terrain[0].substr(0, 4);
-                if (currTerrain == "road" || currTerrain == "wall") {
-                    this.placeRoad(newX,newY,currTerrain);
+                if (this.onBoard(newX, newY)) {
+                    currTerrain = this.map[newY][newX].terrain[0].substr(0, 4);
+                    if (currTerrain == "road" || currTerrain == "wall") 
+                        this.placeRoad(newX,newY,currTerrain);
                 }
             }
             this.generate();
