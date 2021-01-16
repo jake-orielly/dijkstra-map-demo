@@ -194,6 +194,7 @@ export default {
             return x >= 0 && x < this.mapWidth && y >= 0 && y < this.mapHeight;
         },
         step() {
+            this.clearPathMap();
             for (let ind = 0; ind < this.agents.length; ind++)
                 this.agents[ind].step();
             this.generate();
@@ -264,10 +265,10 @@ export default {
                 this.expandPath(agent.getX(),agent.getY(), agent)
         },
         expandPath(x,y,agent) {
-            this.setCell(x,y,"1",this.pathMap);
+            this.setCell(x,y,agent.type,this.pathMap);
             let chosenDir = agent.getNextStep(x,y);
             if (chosenDir && !(chosenDir[0] == x && chosenDir[1] == y)) {
-                this.setCell(chosenDir[0],chosenDir[1],"1",this.pathMap)
+                this.setCell(chosenDir[0],chosenDir[1],agent.type,this.pathMap)
                 this.expandPath(chosenDir[0],chosenDir[1], agent);
             }
         },
@@ -288,14 +289,22 @@ export default {
                     if (!isNaN(this.map[y][x].value))
                         this.setCell(x,y,undefined,this.map,"value");
                     if (!isNaN(this.pathMap[y][x]))
-                        this.setCell(x,y,undefined,this.pathMap);
+                        this.setCell(x,y,[],this.pathMap);
                 }
         },
         shouldShowPath(x, y) {
             if (this.showingPath && this.pathMap[y][x])
-                return true;
+                return this.pathMap[y][x];
             else
-                return false;
+                return "";
+        },
+        clearPathMap() {
+            this.pathMap = [];
+            for (let y = 0; y < this.mapHeight; y++) {
+                this.pathMap.push([]);
+                for (let x = 0; x < this.mapWidth; x++)
+                    this.pathMap[y].push(undefined);
+            }
         },
         clearMap() {
             this.map = [];
