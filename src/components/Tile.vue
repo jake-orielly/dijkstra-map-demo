@@ -23,11 +23,14 @@
         >
             {{tile.value}}
         </span>
-        <div 
-            class="path-node"
-            :class="[getPathColor()]"
-            v-if="showingPath"
-        ></div>
+        <div class="path-node-container">
+            <div 
+                v-for="node in showingPath"
+                v-bind:key="`${x}-${y}-${node}`"
+                class="path-node"
+                :class="[getPathColor(node)]"
+            ></div>
+        </div>
     </td>
 </template>
 
@@ -57,7 +60,7 @@ export default {
             required: true
         },
         showingPath: {
-            type: String,
+            type: Array,
             required: true
         },
         showingTerrain: {
@@ -92,11 +95,8 @@ export default {
         getImgUrl(item) {
             return utilities.getImgUrl(item);
         },
-        getPathColor() {
-            if (this.showingPath == "dwarf")
-                return "dwarf-path-node"
-            else
-                return "monster-path-node"
+        getPathColor(node) {
+            return `${node}-path-node`
         }
 	}
 };
@@ -136,13 +136,20 @@ span {
     z-index: 2;
 }
 
-.path-node {
+
+.path-node-container {
     position: absolute;
+    bottom: 0rem;
+    z-index: 2;
+}
+
+.path-node {
+    display: inline-block;
     width: 1rem;
     height: 1rem;
     border-radius: 1rem;
-    bottom: 0rem;
-    z-index: 2;
+    margin-bottom: -0.5rem;
+    margin-right: -0.5rem;
 }
 
 .dwarf-path-node {
@@ -151,5 +158,6 @@ span {
 
 .monster-path-node {
     background-color: red;
+    left: 0.5rem;
 }
 </style>

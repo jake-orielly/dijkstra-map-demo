@@ -194,7 +194,6 @@ export default {
             return x >= 0 && x < this.mapWidth && y >= 0 && y < this.mapHeight;
         },
         step() {
-            this.clearPathMap();
             for (let ind = 0; ind < this.agents.length; ind++)
                 this.agents[ind].step();
             this.generate();
@@ -278,7 +277,13 @@ export default {
                 row[x][prop] = val;
                 this.$set(arr, y, row);
             }
-            else if (!prop && arr[y][x] != val) {
+            else if (!prop && typeof val == "string") {
+                if (row[x].indexOf(val) == -1) {
+                    row[x].push(val);
+                    this.$set(arr, y, row);
+                }
+            }
+            else if (!prop) {
                 row[x] = val;
                 this.$set(arr, y, row);
             }
@@ -288,23 +293,14 @@ export default {
                 for (let x = 0; x < this.mapWidth; x++) {
                     if (!isNaN(this.map[y][x].value))
                         this.setCell(x,y,undefined,this.map,"value");
-                    if (!isNaN(this.pathMap[y][x]))
-                        this.setCell(x,y,[],this.pathMap);
+                    this.setCell(x,y,[],this.pathMap);
                 }
         },
         shouldShowPath(x, y) {
-            if (this.showingPath && this.pathMap[y][x])
+            if (this.showingPath)
                 return this.pathMap[y][x];
             else
-                return "";
-        },
-        clearPathMap() {
-            this.pathMap = [];
-            for (let y = 0; y < this.mapHeight; y++) {
-                this.pathMap.push([]);
-                for (let x = 0; x < this.mapWidth; x++)
-                    this.pathMap[y].push(undefined);
-            }
+                return [];
         },
         clearMap() {
             this.map = [];
@@ -319,7 +315,7 @@ export default {
                         entity:undefined,
                         terrain:this.getPlainsVal()
                     });
-                    this.pathMap[y].push(undefined);
+                    this.pathMap[y].push([]);
                 }
             }
         },
