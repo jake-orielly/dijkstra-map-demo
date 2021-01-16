@@ -168,12 +168,7 @@ export default {
                     roadTotal += primeMap["" + dir[0] + dir[1]];
                 }
             }
-            if (roadTotal == 0 || roadTotal == 3 || roadTotal == 7)
-                return `${type}s/${type}-10`;
-            else if (roadTotal == 5 || roadTotal == 11)
-                return `${type}s/${type}-16`;
-            else
-                return `${type}s/${type}-${roadTotal}`;
+            return `${type}s/${type}-${roadTotal}`;
         },
         dragEvent(x,y) {
             if (this.dragging)
