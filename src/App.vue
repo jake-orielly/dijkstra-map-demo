@@ -1,6 +1,9 @@
 <template>
   <div>
-    <Tutorial/>
+    <Tutorial
+        :tutorialOpen="showingTutorial"
+        @closeTutorial="showingTutorial = false"
+    />
     <div id="board-container">
         <GameBoard
             ref="gameBoard"
@@ -111,7 +114,14 @@
                 :defaultValue="showingGridLines"
             />
         </ExpandableMenuRow>
-
+        <p
+            @click="showingTutorial = true"
+            class="clickable"
+            id="tutorial-link"
+        >
+            Tutorial
+            <span>&#9432;</span>
+        </p>
     </div>
   </div>
 </template>
@@ -148,6 +158,7 @@ export default {
                 value: undefined, 
                 type: undefined
             },
+            showingTutorial: true,
             showingPath: true,
             showingValues: false,
             showingColors: false,
@@ -193,7 +204,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 
 * {
@@ -233,5 +244,13 @@ button {
 .terrain-img {
     height: 3rem;
     width: 3rem;
+}
+
+#tutorial-link {
+    font-size: 2rem;
+
+    span {
+        font-weight: bold;
+    }
 }
 </style>

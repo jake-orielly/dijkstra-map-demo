@@ -1,16 +1,25 @@
 <template>
-    <div id="tutorial-container">
+    <div 
+        v-if="tutorialOpen"
+        id="tutorial-container"
+    >
         <div id="tutorial-content-container">
             <h1>
                 Tutorial
             </h1>
+            <button 
+                @click="closeTutorial"
+                id="close-button"
+            >
+                &#10005;
+            </button>
             <TableOfContents
                 :sections="sections"
             />
             <div id="tutorial-control-container">
                 <button>Back</button>
                 <button>Next</button>
-                <button>Skip</button>
+                <button @click="closeTutorial">Skip</button>
             </div>
         </div>
         <div id="tutorial-shade"></div>
@@ -20,6 +29,12 @@
 <script>
 import TableOfContents from './TableOfContents.vue'
 export default {
+    props: {
+        tutorialOpen: {
+            type: Boolean,
+            required: true
+        }
+    },
     components: {
         TableOfContents
     },
@@ -32,6 +47,9 @@ export default {
         }
 	},
 	methods: {
+        closeTutorial() {
+            this.$emit("closeTutorial");
+        }
 	}
 };
 </script>
@@ -68,5 +86,11 @@ h1 {
     position: absolute;
     right: 2rem;
     bottom: 2rem;
+}
+
+#close-button {
+    position: absolute;
+    right: 0.5rem;
+    top: 1rem;
 }
 </style>
