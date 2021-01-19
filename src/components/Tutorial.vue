@@ -120,13 +120,13 @@ h1 {
 
 #tutorial-content-container {
     position: absolute;
-    top: 40%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10;
     background-color: white;
     width: 70%;
-    height: 65%;
+    height: 75%;
 }
 
 #tutorial-body-container {

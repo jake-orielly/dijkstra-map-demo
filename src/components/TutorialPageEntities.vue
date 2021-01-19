@@ -1,18 +1,19 @@
 <template>
     <div>
         <p class="title"> Entities </p>
+        <br>
         <p>
             <img src="../assets/dwarf.png">
             <span class="text-block">
                 <span class="emphasis"> Dwarf</span>:
-                These determined adventurers will seek out any treasure in the map.
+                One of two agent types, these determined adventurers will seek out any treasure in the map.
             </span>
         </p>
         <p>
             <img src="../assets/monster.png">
             <span class="text-block">
                 <span class="emphasis"> Monster</span>:
-                This fearsome beast will hunt down and eat any dwarves it can catch.
+                The second agent type, this fearsome beast will hunt down and eat any dwarves it can catch.
             </span>
         </p>
         <p>
@@ -33,7 +34,7 @@
             <img src="../assets/erase.png">
             <span class="text-block">
                 <span class="emphasis"> Erase Tool</span>:
-                Handily removes both entites and terrain.
+                Handily removes both entities and terrain.
             </span>
         </p>
     </div>

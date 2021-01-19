@@ -10,7 +10,7 @@
             <span class="emphasis">Showing/Hiding Terrain</span>: Toggle the terrain images.
         </p>
         <p>
-            <span class="emphasis">Showing/Hiding Grid Lines</span>: Toggle lines seperating the board
+            <span class="emphasis">Showing/Hiding Grid Lines</span>: Toggle lines separating the board
             into discrete squares.
         </p>
         <img
