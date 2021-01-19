@@ -117,9 +117,9 @@ export default {
             else if (this.currSelection.type == "entity") {
                 this.setCell(x,y,this.currSelection.value,this.map,"entity");
                 if (this.currSelection.value == "dwarf")
-                    this.agents.unshift(new Dwarf(x, y, this))
+                    this.agents.push(new Dwarf(x, y, this))
                 else if (this.currSelection.value == "monster")
-                    this.agents.push(new Monster(x, y, this))
+                    this.agents.unshift(new Monster(x, y, this))
                 else if (this.currSelection.value in goals)
                     this.setCell(x,y,goals[this.currSelection.value].value,this.map,"value");
             }
