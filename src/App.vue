@@ -54,7 +54,7 @@
             </TileTool>
         </ExpandableMenuRow>
         <ExpandableMenuRow
-            :label="'Actions'"
+            :label="'Controls'"
         >
             <button 
                 @click="setSpeed('pause')"
@@ -239,6 +239,8 @@ button {
     border-radius: 5px;
     margin-right: 0.5rem;
     margin-bottom: 0.5rem;
+    cursor: pointer;
+    user-select: none;
 }
 
 .terrain-img {

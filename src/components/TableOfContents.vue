@@ -2,8 +2,10 @@
     <div>
         <ul>
             <li
-                v-for="section in sections"
+                v-for="(section, ind) in sections"
                 v-bind:key="section"
+                :class="{'active-section' : currentSection == section}"
+                @click="$emit('sectionClick',ind)"
             >
                 {{section}}
             </li>
@@ -16,6 +18,10 @@ export default {
     props: {
         sections: {
             type: Array,
+            required: true
+        },
+        currentSection: {
+            type: String,
             required: true
         }
     },
@@ -33,5 +39,16 @@ export default {
 ul {
     font-size: 1.5rem;
     list-style: none;
+    cursor: pointer;
+    user-select: none;
+}
+
+li {
+    margin-bottom: 0.5rem;
+}
+
+.active-section {
+    color: blue;
+    font-weight: bold;
 }
 </style>

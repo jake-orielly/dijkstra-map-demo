@@ -13,13 +13,34 @@
             >
                 &#10005;
             </button>
-            <TableOfContents
-                :sections="sections"
-            />
+            <div id="tutorial-body-container">
+                <TableOfContents
+                    :sections="sections"
+                    :currentSection="currentSection"
+                    @sectionClick="setSelection"
+                />
+                <TutorialContent
+                    :currentSection="currentSection"
+                />
+            </div>
             <div id="tutorial-control-container">
-                <button>Back</button>
-                <button>Next</button>
-                <button @click="closeTutorial">Skip</button>
+                <div></div>
+                <div>
+                    <button 
+                        v-if="currentSectionNum > 0"
+                        @click="changeSection(-1)"
+                    >
+                        Back
+                    </button>
+                </div>
+                <div>
+                    <button 
+                        v-if="currentSectionNum < sections.length - 1"
+                        @click="changeSection(1)"
+                    >
+                        Next
+                    </button>
+                </div>
             </div>
         </div>
         <div id="tutorial-shade"></div>
@@ -28,6 +49,8 @@
 
 <script>
 import TableOfContents from './TableOfContents.vue'
+import TutorialContent from './TutorialContent.vue'
+
 export default {
     props: {
         tutorialOpen: {
@@ -36,17 +59,32 @@ export default {
         }
     },
     components: {
-        TableOfContents
+        TableOfContents,
+        TutorialContent
     },
     data() {
         return {
             sections: [
-                "Part 1",
-                "Part 2"
-            ]
+                "Entities",
+                "Terrain",
+                "Controls",
+                "Settings"
+            ],
+            currentSectionNum: 0,
         }
 	},
+    computed: {
+        currentSection() {
+            return this.sections[this.currentSectionNum];
+        }
+    },
 	methods: {
+        changeSection(val) {
+            this.currentSectionNum += val;
+        },
+        setSelection(val) {
+            this.currentSectionNum = val;
+        },
         closeTutorial() {
             this.$emit("closeTutorial");
         }
@@ -82,9 +120,16 @@ h1 {
     height: 50%;
 }
 
+#tutorial-body-container {
+    display: grid;
+    grid-template-columns: 20% 80%;
+}
+
 #tutorial-control-container {
     position: absolute;
-    right: 2rem;
+    display: grid;
+    grid-template-columns: 70% 15% 15%;
+    width: 100%;
     bottom: 2rem;
 }
 
