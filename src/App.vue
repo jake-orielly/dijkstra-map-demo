@@ -79,10 +79,6 @@
         <ExpandableMenuRow
             :label="'Settings'"
         >
-            <span class="color-label">
-                <input type="color" v-model="mapColor">
-                Value Color
-            </span>
             <Toggle 
                 @toggle="toggleShowingPath" 
                 :onLabel="'Showing Path'"
@@ -101,6 +97,10 @@
                 :offLabel="'Hiding Colors'"
                 :defaultValue="showingColors"
             />
+            <span class="color-label">
+                <input type="color" v-model="mapColor">
+                Value Color
+            </span>
             <Toggle 
                 @toggle="toggleShowingTerrain" 
                 :onLabel="'Showing Terrain'"

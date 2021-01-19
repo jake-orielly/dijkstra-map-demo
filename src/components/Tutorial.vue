@@ -40,6 +40,12 @@
                     >
                         Next
                     </button>
+                    <button 
+                        v-if="currentSectionNum == sections.length - 1"
+                        @click="closeTutorial(1)"
+                    >
+                        Done
+                    </button>
                 </div>
             </div>
         </div>
@@ -65,10 +71,13 @@ export default {
     data() {
         return {
             sections: [
+                "Introduction",
                 "Entities",
                 "Terrain",
                 "Controls",
-                "Settings"
+                "Settings I",
+                "Settings II",
+                "Thanks!"
             ],
             currentSectionNum: 0,
         }
@@ -116,19 +125,19 @@ h1 {
     transform: translate(-50%, -50%);
     z-index: 10;
     background-color: white;
-    width: 50%;
-    height: 50%;
+    width: 70%;
+    height: 65%;
 }
 
 #tutorial-body-container {
     display: grid;
-    grid-template-columns: 20% 80%;
+    grid-template-columns: 20% 70%;
 }
 
 #tutorial-control-container {
     position: absolute;
     display: grid;
-    grid-template-columns: 70% 15% 15%;
+    grid-template-columns: 80% 10% 10%;
     width: 100%;
     bottom: 2rem;
 }
