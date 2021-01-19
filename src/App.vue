@@ -129,7 +129,7 @@
 <script src="./main.js">
 </script>
 
-<script>
+<script> 
 import GameBoard from './components/GameBoard.vue'
 import ExpandableMenuRow from './components/ExpandableMenuRow.vue'
 import Slider from './components/Slider.vue'
@@ -167,6 +167,10 @@ export default {
             gameTick: undefined,
             mapColor: "#ff0000",
         }
+    },
+    mounted() {
+        if (this.$cookies.get('tutorialComplete'))
+            this.showingTutorial = false;
     },
     methods: {
         setSelection(selection, type) {

@@ -96,6 +96,7 @@ export default {
         },
         closeTutorial() {
             this.$emit("closeTutorial");
+            this.$cookies.set('tutorialComplete',true);
         }
 	}
 };
