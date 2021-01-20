@@ -115,8 +115,7 @@ export default {
                 );
             }
             else if (this.currSelection.type == "entity") {
-                if (this.map[y][x].entity)
-                    this.removeAgent(x,y)
+                this.removeAgent(x,y)
                 this.setCell(x,y,this.currSelection.value,this.map,"entity");
                 if (this.currSelection.value == "dwarf")
                     this.agents.push(new Dwarf(x, y, this))
@@ -181,11 +180,13 @@ export default {
             return `${type}s/${type}-${roadTotal}`;
         },
         removeAgent(x, y) {
-            for (let i = 0; i < this.agents.length; i++)
-                if (this.agents[i].x == x && this.agents[i].y == y) {
-                    this.agents.splice(i, 1);
-                    break;
-                }
+            console.log(1)
+            if (this.map[y][x].entity)
+                for (let i = 0; i < this.agents.length; i++)
+                    if (this.agents[i].x == x && this.agents[i].y == y) {
+                        this.agents.splice(i, 1);
+                        break;
+                    }
         },
         dragEvent(x,y) {
             if (this.dragging)
