@@ -6,6 +6,7 @@ const cardinalDirs = [
 ];
 
 let dwarfBag = [];
+let monsterBag = [];
 
 function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {
@@ -30,6 +31,11 @@ function getImgUrl(item) {
             fillDwarfBag();
         return require(`../assets/dwarves/${dwarfBag.pop()}.png`);
     }
+    if (item == "monster") {
+        if (!monsterBag.length)
+            fillMonsterBag();
+        return require(`../assets/monsters/${monsterBag.pop()}.png`);
+    }
     else
         return require(`../assets/${item}.png`)
 }
@@ -39,6 +45,13 @@ function fillDwarfBag() {
     for (let i = 0; i < numDwarfImages; i++)
         dwarfBag.push(`dwarf-${i}`);
     dwarfBag = shuffleArray(dwarfBag);
+}
+
+function fillMonsterBag() {
+    let numMonsterImages = 4;
+    for (let i = 0; i < numMonsterImages; i++)
+        monsterBag.push(`monster-${i}`);
+    monsterBag = shuffleArray(monsterBag);
 }
 
 import goals from "./goals.js";

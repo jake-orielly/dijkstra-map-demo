@@ -3,8 +3,8 @@ import utilities from "./utilities.js"
 import goals from "./goals.js"
 
 class Monster extends Agent {
-    constructor(x, y, vue) {
-        super(x, y, vue);
+    constructor(x, y, img, vue) {
+        super(x, y, img, vue);
         this.type = "monster"
         this.lastMove = [-1, -1];
     }

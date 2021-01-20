@@ -10,7 +10,7 @@
             </span>
         </p>
         <p>
-            <img src="../assets/monster.png">
+            <img src="../assets/monsters/monster-1.png">
             <span class="text-block">
                 <span class="emphasis"> Monster</span>:
                 The second agent type, this fearsome beast will hunt down and eat any dwarves it can catch.

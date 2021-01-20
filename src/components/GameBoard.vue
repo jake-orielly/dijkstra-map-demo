@@ -124,8 +124,9 @@ export default {
                     this.$parent.entityTools[0].img = utilities.getImgUrl("dwarf");
                 }
                 else if (this.currSelection.value == "monster") {
-                    newEntity = new Monster(x, y, this);
+                    newEntity = new Monster(x, y, this.$parent.entityTools[1].img, this);
                     this.agents.unshift(newEntity)
+                    this.$parent.entityTools[1].img = utilities.getImgUrl("monster");
                 }
                 else if (this.currSelection.value in goals) {
                     newEntity = {
