@@ -248,13 +248,6 @@ export default {
                     this.setCell(x,y,undefined,this.map,"value");
         },
         softSet(x,y,val) {
-            /* let monsters = this.agents.filter(agent => agent.type == "monster");
-            let monsterDistances = (monsters.length ? monsters.map(m => Math.abs(x - m.x) + Math.abs(y - m.y)) : [0]);
-            let minDistance = Math.min(...monsterDistances);
-            let monsterPenalty = (minDistance != 0 && minDistance <= 3 ? Math.pow(4 - minDistance, 2) : 0);
-            if (x == 0 && y == 0)
-                console.log(minDistance, monsterPenalty)
-            val += monsterPenalty; */
             if (
                 (!isNaN(this.map[y][x].value) && val < this.map[y][x].value)
                 || this.map[y][x].value === undefined

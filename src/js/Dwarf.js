@@ -10,10 +10,9 @@ class Dwarf extends Agent {
     }
 
     getPath() {
-        let curr;
+        let curr, result, minVal, newX, newY, newVal;
         this.path = [];
         this.pathHash = {};
-        let result;
         curr = this.getNextStep(this.getX(), this.getY());
         if (this.vue.map[this.getY()][this.getX()].value) {
             while (curr) {
@@ -25,6 +24,22 @@ class Dwarf extends Agent {
             // If we couldn't find a path to a goal, don't do anything
             if (!(this.vue.map[result[1]][result[0]].entity in goals))
                 this.path = [];
+        }
+        else if (this.getMonsterPenalty(this.getX(), this.getY(), 0)) {
+            minVal = this.getMonsterPenalty(this.getX(), this.getY(), 0);
+            // Keeps movement "random-y", avoids getting stuck in loop
+            for (let dir of utilities.shuffleArray(utilities.cardinalDirs)) {
+                newX = this.getX() + dir[0];
+                newY = this.getY() + dir[1];
+                newVal = this.getMonsterPenalty(newX, newY, 0);
+                if (this.vue.onBoard(newX, newY) && 
+                    newVal < minVal &&
+                    this.vue.isValidMove(newX, newY) &&
+                    this.vue.map[newY][newX].entity != "dwarf") {
+                    minVal = newVal;
+                    this.path = [[newX, newY]]
+                }
+            }
         }
         else
             this.path = [];
@@ -45,7 +60,7 @@ class Dwarf extends Agent {
                 if (newTile.entity in goals)
                     newVal = goals[newTile.entity].value;
                 else if (!isNaN(parseInt(newTile.value)))
-                    newVal = newTile.value;
+                    newVal = newTile.value + this.getMonsterPenalty(newX, newY, 2);
                 if ((minVal == undefined && newVal) || newVal < minVal) {
                     minVal = newVal;
                     chosenDir = [newX, newY];
@@ -53,6 +68,19 @@ class Dwarf extends Agent {
             }
         }
         return chosenDir;
+    }
+
+    getMonsterPenalty(x,y,maxDistance) {
+        let monsters = this.vue.agents.filter(agent => agent.type == "monster");
+        if (!monsters.length)
+            return 0;
+        let monsterDistances = (monsters.length ? monsters.map(m => Math.abs(x - m.x) + Math.abs(y - m.y)) : [0]);
+        let minDistance = Math.min(...monsterDistances);
+        // This formula is based mostly on trial and error and general "feeling"
+        if (maxDistance)
+            return (minDistance != 0 && minDistance <= maxDistance ? Math.pow(maxDistance + 1 - minDistance, 1.5) : 0);
+        else 
+            return (minDistance != 0 ? -1 * Math.pow(minDistance, 1.5) : 0);
     }
 }
 
