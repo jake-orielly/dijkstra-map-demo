@@ -105,8 +105,8 @@ export default {
 <style scoped>
 
 img, td {
-    height: 3rem;
-    width: 3rem;
+    height: 2.5rem;
+    width: 2.5rem;
 }
 
 td {

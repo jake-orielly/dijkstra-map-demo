@@ -160,7 +160,7 @@ export default {
             },
             showingTutorial: true,
             showingPath: true,
-            showingValues: false,
+            showingValues: true,
             showingColors: false,
             showingTerrain: true,
             showingGridLines: false,
@@ -248,8 +248,8 @@ button {
 }
 
 .terrain-img {
-    height: 3rem;
-    width: 3rem;
+    height: 2.5rem;
+    width: 2.5rem;
 }
 
 #tutorial-link {

@@ -127,7 +127,7 @@ h1 {
     z-index: 10;
     background-color: white;
     width: 70%;
-    height: 75%;
+    height: 85%;
 }
 
 #tutorial-body-container {
