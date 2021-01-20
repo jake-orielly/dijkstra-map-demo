@@ -119,7 +119,7 @@ td {
 
 span {
     z-index: 3;
-    font-size: 1.75rem;
+    font-size: 1.5rem;
 }
 
 .terrain-img, .entity-img {

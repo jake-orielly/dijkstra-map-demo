@@ -153,7 +153,7 @@ export default {
     data: function() {
         return {
             entityTools:["dwarf","monster",...Object.keys(goals),"erase"],
-            terrainTools:["road","plains","mountain", "wall"],
+            terrainTools:["road","plains","mountain", "wall","erase"],
             currSelection: {
                 value: undefined, 
                 type: undefined
