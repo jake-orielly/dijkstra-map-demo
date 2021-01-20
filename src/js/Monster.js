@@ -22,12 +22,12 @@ class Monster extends Agent {
                 this.vue.agents.splice(i, 1);
     }
 
-    getNextStep(x, y) {
+    getPath() {
         let curr, newX, newY, newItem, inFrontier, dwarfMap, lastMovePenalty, terrainVal;
         let invalidEntities = ["monster", ...Object.keys(goals)];
         let frontier = [{
-            x: x,
-            y: y,
+            x: this.x,
+            y: this.y,
             g: 0,
             // Because the tile under an agent has not value, we can't actually calculate this, but we don't need to
             h: 0,
@@ -35,8 +35,10 @@ class Monster extends Agent {
         }];
         let interior = {};
         let dwarves = this.vue.agents.filter(agent => agent.type == "dwarf");
-        if (!dwarves.length)
-            return undefined;
+        if (!dwarves.length) {
+            this.path = [];
+            return
+        }
         while (frontier.length && !(this.vue.map[frontier[0].y][frontier[0].x].entity == "dwarf")) {
             curr = frontier.shift();
             interior[`${curr.x}-${curr.y}`] = true;
@@ -55,9 +57,9 @@ class Monster extends Agent {
                 }
                 dwarfMap = dwarves.map(d => Math.abs(d.x - newX) + Math.abs(d.y - newY))
                 newItem.g = Math.min.apply(Math, dwarfMap)
-                newItem.solution = (curr.solution ? curr.solution : [newX, newY])
+                newItem.parent = curr;
                 // Heavy penalty for the tile we were just on, prevent back and forth
-                lastMovePenalty = (this.lastMove[0] == newItem.solution[0] && this.lastMove[1] == newItem.solution[1] ? 0.5 : 0)
+                lastMovePenalty = (this.lastMove[0] == newItem.parent.x && this.lastMove[1] == newItem.parent.y ? 0.5 : 0)
                 // Slight penalty for tiles based on distance from nearest treasure
                 terrainVal = (this.vue.map[newY][newX].value == undefined ? 0 : this.vue.map[newY][newX].value / 1000);
                 newItem.p = newItem.h + newItem.g + lastMovePenalty + terrainVal;
@@ -90,8 +92,20 @@ class Monster extends Agent {
             }
         }
         if (!frontier.length)
-            return undefined;
-        return frontier[0].solution;
+            this.path = [];
+        else
+            this.path = this.getPathArray(frontier[0]);
+    }
+
+    getPathArray(node) {
+        let curr = node;
+        let result = [];
+        // We actually want to exclude the oldest ancestor because it's the start position
+        while (curr.parent) {
+            result.unshift([curr.x, curr.y]);
+            curr = curr.parent;
+        }
+        return result;
     }
 }
 

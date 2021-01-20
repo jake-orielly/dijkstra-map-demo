@@ -246,6 +246,13 @@ export default {
                     this.setCell(x,y,undefined,this.map,"value");
         },
         softSet(x,y,val) {
+            /* let monsters = this.agents.filter(agent => agent.type == "monster");
+            let monsterDistances = (monsters.length ? monsters.map(m => Math.abs(x - m.x) + Math.abs(y - m.y)) : [0]);
+            let minDistance = Math.min(...monsterDistances);
+            let monsterPenalty = (minDistance != 0 && minDistance <= 3 ? Math.pow(4 - minDistance, 2) : 0);
+            if (x == 0 && y == 0)
+                console.log(minDistance, monsterPenalty)
+            val += monsterPenalty; */
             if (
                 (!isNaN(this.map[y][x].value) && val < this.map[y][x].value)
                 || this.map[y][x].value === undefined
@@ -265,16 +272,16 @@ export default {
             return this.terrainVals[terrain];
         },
         generatePath() {
-            for (let agent of this.agents)
-                this.expandPath(agent.getX(),agent.getY(), agent)
-        },
-        expandPath(x,y,agent) {
-            this.setCell(x,y,agent.type,this.pathMap);
-            let chosenDir = agent.getNextStep(x,y);
-            if (chosenDir && !(chosenDir[0] == x && chosenDir[1] == y)) {
-                this.setCell(chosenDir[0],chosenDir[1],agent.type,this.pathMap)
-                this.expandPath(chosenDir[0],chosenDir[1], agent);
+            for (let agent of this.agents) {
+                agent.getPath();
+                this.markPath(agent);
             }
+        },
+        markPath(agent) {
+            if (agent.path.length)
+                this.setCell(agent.getX(),agent.getY()  ,agent.type,this.pathMap);
+            for (let node of agent.path)
+                this.setCell(node[0],node[1],agent.type,this.pathMap);
         },
         setCell(x,y,val,arr,prop) {
             let row = arr[y]

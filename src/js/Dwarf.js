@@ -8,14 +8,24 @@ class Dwarf extends Agent {
         this.type = "dwarf"
     }
 
+    getPath() {
+        let curr = this.getNextStep(this.getX(), this.getY());
+        if (this.vue.map[this.getY()][this.getX()].value) {
+            this.path = [];
+            while (curr) {
+                this.path.push(curr);
+                curr = this.getNextStep(curr[0], curr[1]);
+            }
+        }
+        else
+            this.path = [];
+    }
+
     getNextStep(x, y) {
         let minVal, chosenDir, newX, newY, newVal, newTile;
-        let currVal = this.vue.map[y][x].value;
+        // Our cue to stop searching
         if (this.vue.map[y][x].entity in goals)
-            currVal = goals[this.vue.map[y][x].entity].value;
-        // parseInt b/c of weird behavior isNaN(" ") => false
-        if (!isNaN(parseInt(this.vue.map[y][x].value)))
-            minVal = this.vue.map[y][x].value;
+            return;
         for (let dir of utilities.cardinalDirs) {
             newX = x + dir[1];
             newY = y + dir[0];
@@ -33,8 +43,7 @@ class Dwarf extends Agent {
                 }
             }
         }
-        if (minVal < currVal || (x == this.getX() && y == this.getY()))
-            return chosenDir;
+        return chosenDir;
     }
 }
 
