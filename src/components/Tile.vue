@@ -117,9 +117,9 @@ td {
     padding: 0;
 }
 
-
 span {
     z-index: 3;
+    font-size: 1.75rem;
 }
 
 .terrain-img, .entity-img {
