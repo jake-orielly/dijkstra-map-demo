@@ -1,7 +1,8 @@
 class Agent {
-    constructor(x, y, vue) {
+    constructor(x, y, img, vue) {
         this.x = x;
         this.y = y;
+        this.img = img;
         this.vue = vue;
         this.terrainDebt = 0;
         this.type = "agent";
@@ -24,7 +25,7 @@ class Agent {
             this.setY(nextStep[1]);
             this.setX(nextStep[0]);
             destTile = this.vue.map[nextStep[1]][nextStep[0]]
-            destTile.entity = this.type;
+            destTile.entity = this;
             this.setTerrainDebt(
                 this.vue.getTerrainVal(this.getX(), this.getY()) - 1
             );

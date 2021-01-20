@@ -3,7 +3,7 @@
         <p class="title"> Entities </p>
         <br>
         <p>
-            <img src="../assets/dwarf.png">
+            <img src="../assets/dwarves/dwarf-1.png">
             <span class="text-block">
                 <span class="emphasis"> Dwarf</span>:
                 One of two agent types, these determined adventurers will seek out any treasure in the map.

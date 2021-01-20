@@ -9,7 +9,7 @@
     >
         <img 
             v-if="tile.entity"
-            :src="getImgUrl(tile.entity)"
+            :src="tile.entity.img"
             class="entity-img"
         >
         <img 

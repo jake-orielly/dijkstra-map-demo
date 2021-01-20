@@ -3,8 +3,8 @@ import utilities from "./utilities.js"
 import goals from "./goals.js"
 
 class Dwarf extends Agent {
-    constructor(x, y, vue) {
-        super(x, y, vue);
+    constructor(x, y, img, vue) {
+        super(x, y, img, vue);
         this.type = "dwarf"
         this.pathHash = {};
     }
@@ -22,7 +22,7 @@ class Dwarf extends Agent {
             }
             result = this.path[this.path.length - 1];
             // If we couldn't find a path to a goal, don't do anything
-            if (!(this.vue.map[result[1]][result[0]].entity in goals))
+            if (!(utilities.getType(this.vue.map[result[1]][result[0]]) in goals))
                 this.path = [];
         }
         else if (this.getMonsterPenalty(this.getX(), this.getY(), 0)) {
@@ -35,7 +35,7 @@ class Dwarf extends Agent {
                 if (this.vue.onBoard(newX, newY) && 
                     newVal < minVal &&
                     this.vue.isValidMove(newX, newY) &&
-                    this.vue.map[newY][newX].entity != "dwarf") {
+                    utilities.getType(this.vue.map[newY][newX]) != "dwarf") {
                     minVal = newVal;
                     this.path = [[newX, newY]]
                 }
@@ -48,17 +48,17 @@ class Dwarf extends Agent {
     getNextStep(x, y) {
         let minVal, chosenDir, newX, newY, newVal, newTile;
         // Our cue to stop searching
-        if (this.vue.map[y][x].entity in goals)
+        if (utilities.getType(this.vue.map[y][x]) in goals)
             return;
         for (let dir of utilities.cardinalDirs) {
             newX = x + dir[1];
             newY = y + dir[0];
             if (this.vue.onBoard(newX, newY)  && !this.pathHash[`${newX}-${newY}`]) {
                 newTile = this.vue.map[newY][newX];
-                if (newTile.entity == "dwarf" || newTile.entity == "monster")
+                if (utilities.getType(newTile) == "dwarf" || utilities.getType(newTile) == "monster")
                     continue;
-                if (newTile.entity in goals)
-                    newVal = goals[newTile.entity].value;
+                if (utilities.getType(newTile) in goals)
+                    newVal = goals[utilities.getType(newTile)].value;
                 else if (!isNaN(parseInt(newTile.value)))
                     newVal = newTile.value + this.getMonsterPenalty(newX, newY, 2);
                 if ((minVal == undefined && newVal) || newVal < minVal) {

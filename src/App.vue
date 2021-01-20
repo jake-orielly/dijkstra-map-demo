@@ -22,15 +22,15 @@
         >
             <TileTool 
                 v-for="item in entityTools" 
-                v-bind:key="item"
-                :item="item"
-                :isSelected="currSelection.value == item"
-                @clicked="setSelection(item,'entity')"
+                v-bind:key="item.type"
+                :item="item.type"
+                :isSelected="currSelection.value == item.type"
+                @clicked="setSelection(item.type,'entity')"
                 class="clickable"
             >
                 <img 
-                    :src="getImgUrl(item)"
-                    v-bind:alt="item"
+                    :src="item.img"
+                    v-bind:alt="item.type"
                     class="terrain-img"
                 >
             </TileTool>
@@ -152,7 +152,27 @@ export default {
     },
     data: function() {
         return {
-            entityTools:["dwarf","monster",...Object.keys(goals),"erase"],
+            //...Object.keys(goals),
+            entityTools:[
+                {
+                    type:"dwarf",
+                    img:this.getImgUrl("dwarf")
+                },
+                {
+                    type:"monster",
+                    img:this.getImgUrl("monster")
+                },
+                ...Object.keys(goals).map(
+                    item => {
+                        return {
+                            type:item,
+                            img:this.getImgUrl(item)
+                }}),
+                {
+                    type:"erase",
+                    img:this.getImgUrl("erase")
+                },
+            ],
             terrainTools:["road","plains","mountain", "wall","erase"],
             currSelection: {
                 value: undefined, 

@@ -115,17 +115,29 @@ export default {
                 );
             }
             else if (this.currSelection.type == "entity") {
+                let newEntity;
                 this.removeAgent(x,y)
-                this.setCell(x,y,this.currSelection.value,this.map,"entity");
-                if (this.currSelection.value == "dwarf")
-                    this.agents.push(new Dwarf(x, y, this))
-                else if (this.currSelection.value == "monster")
-                    this.agents.unshift(new Monster(x, y, this))
-                else if (this.currSelection.value in goals)
+                if (this.currSelection.value == "dwarf") {
+                    // TODO: Clean up this $parent tool thing   
+                    newEntity = new Dwarf(x, y, this.$parent.entityTools[0].img, this);
+                    this.agents.push(newEntity)
+                    this.$parent.entityTools[0].img = utilities.getImgUrl("dwarf");
+                }
+                else if (this.currSelection.value == "monster") {
+                    newEntity = new Monster(x, y, this);
+                    this.agents.unshift(newEntity)
+                }
+                else if (this.currSelection.value in goals) {
+                    newEntity = {
+                        type: this.currSelection.value,
+                        img:utilities.getImgUrl(this.currSelection.value)
+                    };
                     this.setCell(x,y,goals[this.currSelection.value].value,this.map,"value");
+                }
                 if (this.map[y][x].terrain[0].substr(0, 4) == "wall") {
                     this.map[y][x].terrain.shift();
                 }
+                this.setCell(x,y,newEntity,this.map,"entity");
             }
             else if (this.currSelection.type == "terrain") {
                 if (this.currSelection.value == "road" || this.currSelection.value == "wall") 
@@ -180,7 +192,6 @@ export default {
             return `${type}s/${type}-${roadTotal}`;
         },
         removeAgent(x, y) {
-            console.log(1)
             if (this.map[y][x].entity)
                 for (let i = 0; i < this.agents.length; i++)
                     if (this.agents[i].x == x && this.agents[i].y == y) {
@@ -205,7 +216,7 @@ export default {
         isValidMove(x,y) {
             if (this.map[y][x].terrain[0].substr(0,4) == "wall")
                 return false;
-            else if (this.map[y][x].entity == "monster")
+            else if (utilities.getType(this.map[y][x]) == "monster")
                 return false;
             else
                 return true;
@@ -226,8 +237,8 @@ export default {
             this.resetMap();
             for (let y = 0; y < this.mapHeight; y++)
                 for (let x = 0; x < this.mapWidth; x++) 
-                    if (this.map[y][x].entity in goals)
-                        toExpand.push([x,y,goals[this.map[y][x].entity].value])
+                    if (utilities.getType(this.map[y][x]) in goals)
+                        toExpand.push([x,y,goals[utilities.getType(this.map[y][x])].value])
             if (!toExpand)
                 this.clearVals();
             this.expand(toExpand);
@@ -246,8 +257,8 @@ export default {
                         let newX = curr[0] + dir[0];
                         let newY = curr[1] + dir[1];
                         if (this.onBoard(newX,newY)) {
-                            if (this.map[newY][newX].entity in goals)
-                                newVal = goals[this.map[newY][newX].entity].value;
+                            if (utilities.getType(this.map[newY][newX]) in goals)
+                                newVal = goals[utilities.getType(this.map[newY][newX])].value;
                             else if (this.getTerrainVal(newX, newY) == undefined)
                                 newVal = undefined;
                             else

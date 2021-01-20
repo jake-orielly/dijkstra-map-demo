@@ -39,7 +39,7 @@ class Monster extends Agent {
             this.path = [];
             return
         }
-        while (frontier.length && !(this.vue.map[frontier[0].y][frontier[0].x].entity == "dwarf")) {
+        while (frontier.length && !(utilities.getType(this.vue.map[frontier[0].y][frontier[0].x]) == "dwarf")) {
             curr = frontier.shift();
             interior[`${curr.x}-${curr.y}`] = true;
             for (let dir of utilities.cardinalDirs) {
@@ -47,7 +47,7 @@ class Monster extends Agent {
                 newY = curr.y + dir[0];
                 if (!this.vue.onBoard(newX, newY) ||
                     !this.vue.isValidMove(newX, newY) ||
-                    invalidEntities.indexOf(this.vue.map[newY][newX].entity) != -1 ||
+                    invalidEntities.indexOf(utilities.getType(this.vue.map[newY][newX])) != -1 ||
                     interior[`${newX}-${newY}`])
                     continue
                 newItem = {
