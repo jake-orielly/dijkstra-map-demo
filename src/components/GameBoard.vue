@@ -197,8 +197,10 @@ export default {
             return x >= 0 && x < this.mapWidth && y >= 0 && y < this.mapHeight;
         },
         step() {
-            for (let ind = 0; ind < this.agents.length; ind++)
+            for (let ind = 0; ind < this.agents.length; ind++) {
+                this.agents[ind].getPath();
                 this.agents[ind].step();
+            }
             this.generate();
         },
         generate() {

@@ -6,16 +6,25 @@ class Dwarf extends Agent {
     constructor(x, y, vue) {
         super(x, y, vue);
         this.type = "dwarf"
+        this.pathHash = {};
     }
 
     getPath() {
-        let curr = this.getNextStep(this.getX(), this.getY());
+        let curr;
+        this.path = [];
+        this.pathHash = {};
+        let result;
+        curr = this.getNextStep(this.getX(), this.getY());
         if (this.vue.map[this.getY()][this.getX()].value) {
-            this.path = [];
             while (curr) {
                 this.path.push(curr);
+                this.pathHash[`${curr[0]}-${curr[1]}`] = true;
                 curr = this.getNextStep(curr[0], curr[1]);
             }
+            result = this.path[this.path.length - 1];
+            // If we couldn't find a path to a goal, don't do anything
+            if (!(this.vue.map[result[1]][result[0]].entity in goals))
+                this.path = [];
         }
         else
             this.path = [];
@@ -29,7 +38,7 @@ class Dwarf extends Agent {
         for (let dir of utilities.cardinalDirs) {
             newX = x + dir[1];
             newY = y + dir[0];
-            if (this.vue.onBoard(newX, newY)) {
+            if (this.vue.onBoard(newX, newY)  && !this.pathHash[`${newX}-${newY}`]) {
                 newTile = this.vue.map[newY][newX];
                 if (newTile.entity == "dwarf" || newTile.entity == "monster")
                     continue;
