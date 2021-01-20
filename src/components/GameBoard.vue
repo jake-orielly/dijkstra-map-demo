@@ -115,14 +115,8 @@ export default {
                 );
             }
             else if (this.currSelection.type == "entity") {
-                if (this.map[y][x].entity) {
-                    for (let i = 0; i < this.agents.length; i++) {
-                        if (this.agents[i].x == x && this.agents[i].y == y) {
-                            this.agents.splice(i, 1);
-                            break;
-                        }
-                    }
-                }
+                if (this.map[y][x].entity)
+                    this.removeAgent(x,y)
                 this.setCell(x,y,this.currSelection.value,this.map,"entity");
                 if (this.currSelection.value == "dwarf")
                     this.agents.push(new Dwarf(x, y, this))
@@ -139,6 +133,10 @@ export default {
                     this.placeRoad(x,y,this.currSelection.value);
                 else 
                     this.setCell(x,y,this.currSelection.value,this.map,"terrain");
+                if (this.currSelection.value == "wall") {
+                    this.setCell(x,y,undefined,this.map,"entity");
+                    this.removeAgent(x,y);
+                }
             }
             for (let dir of utilities.cardinalDirs) {
                 newX = x + dir[0];
@@ -181,6 +179,13 @@ export default {
                 }
             }
             return `${type}s/${type}-${roadTotal}`;
+        },
+        removeAgent(x, y) {
+            for (let i = 0; i < this.agents.length; i++)
+                if (this.agents[i].x == x && this.agents[i].y == y) {
+                    this.agents.splice(i, 1);
+                    break;
+                }
         },
         dragEvent(x,y) {
             if (this.dragging)
