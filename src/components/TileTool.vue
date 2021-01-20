@@ -41,10 +41,12 @@ export default {
         border: 2px solid black;
         box-shadow: 1px 1px 2px #868181;
     }
-}
 
-.selected {
-    font-weight: bold;
-    border: 3px solid gold;
+    &.selected {
+        img {
+            font-weight: bold;
+            border: 3px solid gold;
+        }
+    }
 }
 </style>
