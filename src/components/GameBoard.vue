@@ -122,6 +122,9 @@ export default {
                     this.agents.unshift(new Monster(x, y, this))
                 else if (this.currSelection.value in goals)
                     this.setCell(x,y,goals[this.currSelection.value].value,this.map,"value");
+                if (this.map[y][x].terrain[0].substr(0, 4) == "wall") {
+                    this.map[y][x].terrain.shift();
+                }
             }
             else if (this.currSelection.type == "terrain") {
                 if (this.currSelection.value == "road" || this.currSelection.value == "wall") 
