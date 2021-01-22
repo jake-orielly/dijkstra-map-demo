@@ -35,6 +35,8 @@ class Monster extends Agent {
         }];
         let interior = {};
         let dwarves = this.vue.agents.filter(agent => agent.type == "dwarf");
+        let loopCount = 0;
+        let emergencyMax = 1000;
         if (!dwarves.length) {
             this.path = [];
             return
@@ -90,6 +92,11 @@ class Monster extends Agent {
                         frontier.unshift(newItem)
                 }
             }
+            loopCount++;
+            if (loopCount > emergencyMax) {
+                console.error("While loop out of control in dwarf getPath")
+                break;
+            }
         }
         if (!frontier.length)
             this.path = [];
@@ -100,10 +107,17 @@ class Monster extends Agent {
     getPathArray(node) {
         let curr = node;
         let result = [];
+        let loopCount = 0;
+        let emergencyMax = 1000;
         // We actually want to exclude the oldest ancestor because it's the start position
         while (curr.parent) {
             result.unshift([curr.x, curr.y]);
             curr = curr.parent;
+            loopCount++;
+            if (loopCount > emergencyMax) {
+                console.error("While loop out of control in monster getPathArray")
+                break;
+            }
         }
         return result;
     }

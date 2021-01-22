@@ -251,6 +251,8 @@ export default {
         },
         expand(toExpand) {
             let curr, newVal;
+            let loopCount = 0;
+            let emergencyMax = 1000;
             while (toExpand.length) {
                 curr = toExpand.pop();
                 if (this.isValidMove(curr[0],curr[1]))
@@ -269,6 +271,11 @@ export default {
                             }
                         }
                     }
+                loopCount++;
+                if (loopCount > emergencyMax) {
+                    console.error("While loop out of control in expand")
+                    break;
+                }
             }
         },
         clearVals() {

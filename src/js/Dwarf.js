@@ -13,12 +13,19 @@ class Dwarf extends Agent {
         let curr, result, minVal, newX, newY, newVal;
         this.path = [];
         this.pathHash = {};
+        let loopCount = 0;
+        let emergencyMax = 1000;
         curr = this.getNextStep(this.getX(), this.getY());
         if (this.vue.map[this.getY()][this.getX()].value) {
             while (curr) {
                 this.path.push(curr);
                 this.pathHash[`${curr[0]}-${curr[1]}`] = true;
                 curr = this.getNextStep(curr[0], curr[1]);
+                loopCount++;
+                if (loopCount > emergencyMax) {
+                    console.error("While loop out of control in dwarf getPath")
+                    break;
+                }
             }
             result = this.path[this.path.length - 1];
             // If we couldn't find a path to a goal, don't do anything
