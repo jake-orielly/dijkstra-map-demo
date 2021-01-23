@@ -179,8 +179,8 @@ export default {
                 type: undefined
             },
             showingTutorial: true,
-            showingPath: true,
-            showingValues: true,
+            showingPath: false,
+            showingValues: false,
             showingColors: false,
             showingTerrain: true,
             showingGridLines: false,
@@ -203,9 +203,9 @@ export default {
         setSpeed(speed) {
             clearInterval(this.gameTick)
             if (speed == "play")
-                this.gameTick = setInterval(this.$refs.gameBoard.step, 500);
+                this.gameTick = setInterval(this.$refs.gameBoard.step, 400);
             else if (speed == "forward")
-                this.gameTick = setInterval(this.$refs.gameBoard.step, 150);
+                this.gameTick = setInterval(this.$refs.gameBoard.step, 75);
         },
         toggleShowingPath() {
             this.showingPath = !this.showingPath;
