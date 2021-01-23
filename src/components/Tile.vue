@@ -13,7 +13,7 @@
             class="entity-img"
         >
         <img 
-            v-for="terrain in tile.terrain.slice().reverse()"
+            v-for="terrain in tile.terrain.slice().reverse().filter(_ => showingTerrain == true)"
             v-bind:key="`${x}-${y}-${terrain}`"
             :src="getImgUrl(terrain)"
             class="terrain-img"
