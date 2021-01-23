@@ -252,7 +252,7 @@ export default {
         expand(toExpand) {
             let curr, newVal;
             let loopCount = 0;
-            let emergencyMax = 1000;
+            let emergencyMax = 10000;
             while (toExpand.length) {
                 curr = toExpand.pop();
                 if (this.isValidMove(curr[0],curr[1]))
