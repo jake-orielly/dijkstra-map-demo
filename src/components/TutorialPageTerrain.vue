@@ -3,8 +3,8 @@
         <p class="title"> Terrain </p>
         <p>
             There are 4 types of terrain. All except walls can be traversed, though at different speeds.
-            The higher the cost, the longer it takes agents to cross, and they will take this into account 
-            when planning their routes. Tip: You can click and drag to draw to easily paint multiple tiles.
+            The higher the cost, the longer it takes agents to cross, and agents will take this into account 
+            when planning their routes. Tip: You can click and drag to easily paint multiple tiles.
         </p>
         <p>
             <img src="../assets/road.png">

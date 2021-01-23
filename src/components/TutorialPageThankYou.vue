@@ -3,8 +3,7 @@
         <p class="title"> Thanks!</p>
         <p>
             Thanks for taking the time to look at this project!
-            If you'd like to provide any feedback, positive or negative, there's a link in the sidebar.
-            The source code is available on <a href="https://github.com/jake-orielly/path-map" target="_blank">Github</a>.
+            The source code is available on <a href="https://github.com/jake-orielly/path-map" target="_blank">Github</a>. Feel free to open issues if you come accross any bugs.
         </p>
     </div>
 </template>

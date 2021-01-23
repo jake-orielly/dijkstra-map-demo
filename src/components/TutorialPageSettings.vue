@@ -11,8 +11,8 @@
             and update as the world changes.
         </p>
         <p>
-            <span class="emphasis">Showing/Hiding Values</span>: Shows a numerical value for each square.
-            The square is a function of the distance to the nearest treasure, taking into account the movement
+            <span class="emphasis">Showing/Hiding Values</span>: Shows a numerical value for each tile.
+            A tile's value is a function of the distance to the nearest treasure, taking into account the movement
             cost of terrain across the shortest path. The closer the treasure the lower the value. Near the
             treasure chest, these values may even be negative.
         </p>

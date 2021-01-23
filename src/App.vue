@@ -189,6 +189,7 @@ export default {
         }
     },
     mounted() {
+        document.title = "Pathfinding Demo";
         if (this.$cookies.get('tutorialComplete'))
             this.showingTutorial = false;
     },

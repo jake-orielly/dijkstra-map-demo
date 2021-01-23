@@ -17,7 +17,7 @@
         </p>
         <p>
             <span class="text-block">
-                The <span class="emphasis">Clear</span> button removes all agents and resets all terrain. Be careful with it!
+                The <span class="emphasis">Clear</span> button removes all agents and resets all terrain. Be careful!
             </span>
         </p>
     </div>

@@ -11,7 +11,7 @@
         </p>
         <p>
             <span class="emphasis">Showing/Hiding Grid Lines</span>: Toggle lines separating the board
-            into discrete squares.
+            into discrete tiles.
         </p>
         <img
             class="hero-image"
