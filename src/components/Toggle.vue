@@ -76,10 +76,10 @@ span {
 .slider:before {
     position: absolute;
     content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
+    height: 1.75rem;
+    width: 1.75rem;
+    left: 2px;
+    bottom: 3px;
     background-color: white;
     transition: 0.1s;
 }
@@ -93,7 +93,7 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-    transform: translateX(26px);
+    transform: translateX(1.75rem);
 }
 
 .slider.round {
@@ -102,5 +102,23 @@ input:checked + .slider:before {
 
 .slider.round:before {
     border-radius: 50%;
+}
+
+@media(max-width:1300px) {
+    span {
+        font-size: 1.5rem;
+        vertical-align: middle;
+    }
+
+    .slider:before {
+        height: 1.5rem;
+        width: 1.5rem;
+        left: 4px;
+        bottom: 2px;
+    }
+
+    .slider.round {
+        height: 1.75rem;
+    }
 }
 </style>

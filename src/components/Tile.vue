@@ -1,8 +1,7 @@
 <template>
     <td 
         class="clickable"
-        :style="{ backgroundColor: getColor(),
-        border: (showingGridLines ? '1px solid black' : '')}"
+        :style="{ backgroundColor: getColor()}"
         @mousedown="$emit('setDrag',x, y, true)"
         @mouseup="$emit('setDrag',x, y, false); $emit('click', x, y)"
         @mouseover="$emit('dragEvent',x, y)"
@@ -17,6 +16,7 @@
             v-bind:key="`${x}-${y}-${terrain}`"
             :src="getImgUrl(terrain)"
             class="terrain-img"
+            :class="{'terrain-grid-line' : showingGridLines}"
         >
         <span
             v-if="shouldShow()"
@@ -132,10 +132,13 @@ span {
     z-index: -1;
 }
 
+.terrain-grid-line {
+    border: 1px solid black;
+}
+
 .entity-img {
     z-index: 2;
 }
-
 
 .path-node-container {
     position: absolute;
@@ -159,5 +162,32 @@ span {
 .monster-path-node {
     background-color: red;
     left: 0.5rem;
+}
+
+@media(max-width:1300px) {
+    img, td {
+        height: 1.5rem;
+        width: 1.5rem;
+    }
+
+    td {
+        font-size: 1rem;
+    }
+
+    span {
+        font-size: 0.75rem;
+    }
+
+    .path-node { 
+        width: 0.5rem;
+        height: 0.5rem;
+        margin-bottom: -0.25rem;
+        margin-right: -0.25rem;
+    }
+
+    .terrain-grid-line {
+        top: -1px;
+        left: -1px;
+    }
 }
 </style>

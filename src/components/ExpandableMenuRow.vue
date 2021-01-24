@@ -57,4 +57,10 @@ p {
 .row-content {
     display: inline-block;
 }
+
+@media(max-width:1300px) {
+    p {
+        font-size: 1.75rem;
+    }
+}
 </style>

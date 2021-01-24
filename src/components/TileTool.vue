@@ -49,4 +49,11 @@ export default {
         }
     }
 }
+
+@media(max-width:1300px) {
+    .tile-tool {
+        width: 2.2rem;
+        height: 2.2rem;
+    }
+}
 </style>

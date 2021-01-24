@@ -295,8 +295,22 @@ button {
         width: 2rem;
     }
 
-    #tutorial-link, .color-label {
+    #tutorial-link {
+        font-size: 1.75rem;
+    }
+    
+    .color-label {
         font-size: 1.5rem;
+    }
+
+    input {
+        height: 1.25rem;
+        margin-bottom: 0.5rem;
+    }
+
+    #ui-container {
+        margin-top: -1.5rem;
+        width: 30%;
     }
 }
 </style>
