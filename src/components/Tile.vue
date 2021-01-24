@@ -87,7 +87,7 @@ export default {
             return this.showingValues || isNaN(this.tile.value)
         },
         getColor() {
-            if (!this.showingColors || this.tile.value == " ")
+            if (!this.showingColors || this.tile.value == undefined)
                 return "rgba(0,0,0,0)";
             else
                 return `rgba(${this.rgbMapColor.join(",")},${(this.tile.value / this.maxVal) * 0.7})`;
