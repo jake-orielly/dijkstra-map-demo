@@ -1,0 +1,52 @@
+div {
+    display: block;
+}
+
+img {
+    height: 2.5rem;
+    width: 2.5rem;
+    float: left;
+    margin-right: 1rem;
+}
+
+p {
+    display: inline-block;
+    font-size: 1.5rem;
+    margin: 0.5rem 0;
+}
+
+.title {
+    font-size: 2rem;
+    margin: 0;
+}
+
+.text-block {
+    float: left;
+    width: 85%;
+}
+
+.emphasis {
+    font-weight: bold;
+}
+
+.hero-image {
+    width: 50%;
+    height: 50%;
+    margin-left: 25%;
+}
+
+@media(max-width:1300px) {
+    p {
+        font-size: 1rem;
+    }
+
+    .title {
+        font-size: 1.5rem;
+    }
+
+    .hero-image {
+        width: 35%;
+        height: 35%;
+        margin-left: 25%;
+    }    
+}
