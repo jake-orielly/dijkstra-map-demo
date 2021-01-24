@@ -4,124 +4,126 @@
         :tutorialOpen="showingTutorial"
         @closeTutorial="showingTutorial = false"
     />
-    <div id="board-container">
-        <GameBoard
-            ref="gameBoard"
-            :currSelection="currSelection"
-            :showingPath="showingPath"
-            :showingValues="showingValues"
-            :showingColors="showingColors"
-            :showingTerrain="showingTerrain"
-            :showingGridLines="showingGridLines"
-            :mapColor="mapColor"
-        />
-    </div>
-    <div id="ui-container">
-        <ExpandableMenuRow
-            :label="'Entities'"
-        >
-            <TileTool 
-                v-for="item in entityTools" 
-                v-bind:key="item.type"
-                :item="item.type"
-                :isSelected="currSelection.value == item.type"
-                @clicked="setSelection(item.type,'entity')"
-                class="clickable"
+    <div id="content-container">
+        <div id="board-container">
+            <GameBoard
+                ref="gameBoard"
+                :currSelection="currSelection"
+                :showingPath="showingPath"
+                :showingValues="showingValues"
+                :showingColors="showingColors"
+                :showingTerrain="showingTerrain"
+                :showingGridLines="showingGridLines"
+                :mapColor="mapColor"
+            />
+        </div>
+        <div id="ui-container">
+            <ExpandableMenuRow
+                :label="'Entities'"
             >
-                <img 
-                    :src="item.img"
-                    v-bind:alt="item.type"
-                    class="terrain-img"
+                <TileTool 
+                    v-for="item in entityTools" 
+                    v-bind:key="item.type"
+                    :item="item.type"
+                    :isSelected="currSelection.value == item.type"
+                    @clicked="setSelection(item.type,'entity')"
+                    class="clickable"
                 >
-            </TileTool>
-        </ExpandableMenuRow>
-        <ExpandableMenuRow
-            :label="'Terrain'"
-        >
-            <TileTool 
-                v-for="item in terrainTools" 
-                v-bind:key="item"
-                :item="item"
-                :isSelected="currSelection.value == item"
-                @clicked="setSelection(item,'terrain')"
-                class="clickable"
+                    <img 
+                        :src="item.img"
+                        v-bind:alt="item.type"
+                        class="terrain-img"
+                    >
+                </TileTool>
+            </ExpandableMenuRow>
+            <ExpandableMenuRow
+                :label="'Terrain'"
             >
-                <img 
-                    :src="getImgUrl(item)"
-                    v-bind:alt="item"
-                    class="terrain-img"
+                <TileTool 
+                    v-for="item in terrainTools" 
+                    v-bind:key="item"
+                    :item="item"
+                    :isSelected="currSelection.value == item"
+                    @clicked="setSelection(item,'terrain')"
+                    class="clickable"
                 >
-            </TileTool>
-        </ExpandableMenuRow>
-        <ExpandableMenuRow
-            :label="'Controls'"
-        >
-            <button 
-                @click="setSpeed('pause')"
-                class="button-selected"
+                    <img 
+                        :src="getImgUrl(item)"
+                        v-bind:alt="item"
+                        class="terrain-img"
+                    >
+                </TileTool>
+            </ExpandableMenuRow>
+            <ExpandableMenuRow
+                :label="'Controls'"
             >
-                <font-awesome-icon :icon="['fas', 'pause']" />
-            </button>
-            <button 
-                @click="setSpeed('play')"
+                <button 
+                    @click="setSpeed('pause')"
+                    class="button-selected"
+                >
+                    <font-awesome-icon :icon="['fas', 'pause']" />
+                </button>
+                <button 
+                    @click="setSpeed('play')"
+                >
+                    <font-awesome-icon :icon="['fas', 'play']" />
+                </button>
+                <button 
+                    @click="setSpeed('forward')"
+                >
+                    <font-awesome-icon :icon="['fas', 'forward']" />
+                </button>
+                <br>
+                <button @click="$refs.gameBoard.step()">Step</button>
+                <button @click="$refs.gameBoard.clearMap()">Clear</button>
+            </ExpandableMenuRow>
+            <ExpandableMenuRow
+                :label="'Settings'"
             >
-                <font-awesome-icon :icon="['fas', 'play']" />
-            </button>
-            <button 
-                @click="setSpeed('forward')"
+                <Toggle 
+                    @toggle="toggleShowingPath" 
+                    :onLabel="'Showing Path'"
+                    :offLabel="'Hiding Path'"
+                    :defaultValue="showingPath"
+                />
+                <Toggle 
+                    @toggle="toggleShowingValues" 
+                    :onLabel="'Showing Values'"
+                    :offLabel="'Hiding Values'"
+                    :defaultValue="showingValues"
+                />
+                <Toggle 
+                    @toggle="toggleShowingColors" 
+                    :onLabel="'Showing Colors'"
+                    :offLabel="'Hiding Colors'"
+                    :defaultValue="showingColors"
+                />
+                <span class="color-label">
+                    <input type="color" v-model="mapColor">
+                    Value Color
+                </span>
+                <Toggle 
+                    @toggle="toggleShowingTerrain" 
+                    :onLabel="'Showing Terrain'"
+                    :offLabel="'Hiding Terrain'"
+                    :defaultValue="showingTerrain"
+                />
+                <Toggle 
+                    @toggle="toggleShowGridLines" 
+                    :onLabel="'Showing Grid Lines'"
+                    :offLabel="'Hiding Grid Lines'"
+                    :defaultValue="showingGridLines"
+                />
+            </ExpandableMenuRow>
+            <p
+                @click="showingTutorial = true"
+                class="clickable"
+                id="tutorial-link"
             >
-                <font-awesome-icon :icon="['fas', 'forward']" />
-            </button>
-            <br>
-            <button @click="$refs.gameBoard.step()">Step</button>
-            <button @click="$refs.gameBoard.clearMap()">Clear</button>
-        </ExpandableMenuRow>
-        <ExpandableMenuRow
-            :label="'Settings'"
-        >
-            <Toggle 
-                @toggle="toggleShowingPath" 
-                :onLabel="'Showing Path'"
-                :offLabel="'Hiding Path'"
-                :defaultValue="showingPath"
-            />
-            <Toggle 
-                @toggle="toggleShowingValues" 
-                :onLabel="'Showing Values'"
-                :offLabel="'Hiding Values'"
-                :defaultValue="showingValues"
-            />
-            <Toggle 
-                @toggle="toggleShowingColors" 
-                :onLabel="'Showing Colors'"
-                :offLabel="'Hiding Colors'"
-                :defaultValue="showingColors"
-            />
-            <span class="color-label">
-                <input type="color" v-model="mapColor">
-                Value Color
-            </span>
-            <Toggle 
-                @toggle="toggleShowingTerrain" 
-                :onLabel="'Showing Terrain'"
-                :offLabel="'Hiding Terrain'"
-                :defaultValue="showingTerrain"
-            />
-            <Toggle 
-                @toggle="toggleShowGridLines" 
-                :onLabel="'Showing Grid Lines'"
-                :offLabel="'Hiding Grid Lines'"
-                :defaultValue="showingGridLines"
-            />
-        </ExpandableMenuRow>
-        <p
-            @click="showingTutorial = true"
-            class="clickable"
-            id="tutorial-link"
-        >
-            Tutorial
-            <span>&#9432;</span>
-        </p>
+                Tutorial
+                <span>&#9432;</span>
+            </p>
+        </div>
     </div>
   </div>
 </template>
@@ -278,6 +280,16 @@ button {
 
     span {
         font-weight: bold;
+    }
+}
+
+#content-container {
+    margin: 2rem;
+}
+
+@media(max-width:1300px) {
+    button {
+        font-size: 1.5rem;
     }
 }
 </style>

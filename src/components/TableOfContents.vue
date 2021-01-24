@@ -51,4 +51,10 @@ li {
     color: blue;
     font-weight: bold;
 }
+
+@media(max-width:1300px) {
+    ul {
+        font-size: 1.15rem;
+    }
+}
 </style>

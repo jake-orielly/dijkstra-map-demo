@@ -34,3 +34,19 @@ p {
     height: 50%;
     margin-left: 25%;
 }
+
+@media(max-width:1300px) {
+    p {
+        font-size: 1rem;
+    }
+
+    .title {
+        font-size: 1.5rem;
+    }
+
+    .hero-image {
+        width: 35%;
+        height: 35%;
+        margin-left: 25%;
+    }    
+}
