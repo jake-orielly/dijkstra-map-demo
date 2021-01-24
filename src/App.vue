@@ -134,7 +134,6 @@
 <script> 
 import GameBoard from './components/GameBoard.vue'
 import ExpandableMenuRow from './components/ExpandableMenuRow.vue'
-import Slider from './components/Slider.vue'
 import TileTool from './components/TileTool.vue'
 import Toggle from './components/Toggle.vue'
 import Tutorial from './components/Tutorial'
@@ -147,7 +146,6 @@ export default {
   components: {
         GameBoard,
         ExpandableMenuRow,
-        Slider,
         TileTool,
         Toggle,
         Tutorial
@@ -289,6 +287,15 @@ button {
 
 @media(max-width:1300px) {
     button {
+        font-size: 1.5rem;
+    }
+
+    .terrain-img {
+        height: 2rem;
+        width: 2rem;
+    }
+
+    #tutorial-link, .color-label {
         font-size: 1.5rem;
     }
 }
